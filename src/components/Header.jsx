@@ -1,20 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
+import { SignIn, SignOut } from './Auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from 'firebase/auth';
 
 const Header = () => {
+
+  const auth = getAuth();
+  const [user] = useAuthState(auth);
+
   return (
     <HeaderContainer>
       <Logo>LostAndFound+</Logo>
       <UserInfo>
-        <UserIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/1394bf55adad9bce9b5db46599eb47259925b3b28609188c86776a691a908cdd?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="User avatar" />
+        <UserIcon src={"https://cdn.builder.io/api/v1/image/assets/TEMP/1394bf55adad9bce9b5db46599eb47259925b3b28609188c86776a691a908cdd?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208"} alt="User avatar" />
       </UserInfo>
       <WelcomeMessage>
-        <Greeting>Good Morning, Blake!</Greeting>
+        <Greeting>Good Morning{user ? `, ${user.displayName}` : ""}</Greeting>
         <DashboardInfo>
           Here's your Inventory Dashboard. Click{' '}
           <HomeLink href="/">here</HomeLink> to go back home
         </DashboardInfo>
       </WelcomeMessage>
+      <SignIn />
+      <SignOut />
     </HeaderContainer>
   );
 };
