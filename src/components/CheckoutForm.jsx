@@ -3,8 +3,8 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const default_form_state = {
     name: "",
-    tool: "",
     time: "",
+    user: "",
 }
 
 const CheckoutForm = () => {
