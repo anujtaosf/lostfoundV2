@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { SignIn, SignOut } from './Auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
 
@@ -11,7 +12,9 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <Logo>LostAndFound+</Logo>
+      <Link to="/">
+        <Logo>LostAndFound+</Logo>
+      </Link>
       <UserInfo>
         <UserIcon src={"https://cdn.builder.io/api/v1/image/assets/TEMP/1394bf55adad9bce9b5db46599eb47259925b3b28609188c86776a691a908cdd?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208"} alt="User avatar" />
       </UserInfo>
@@ -23,6 +26,9 @@ const Header = () => {
           <HomeLink href="/">here</HomeLink> to go back home
         </DashboardInfo>
       </WelcomeMessage>
+      <Link to="/dashboard">
+        Dashboard
+      </Link>
       <SignIn />
       <SignOut />
     </HeaderContainer>
