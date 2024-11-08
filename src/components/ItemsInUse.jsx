@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import ItemCard from './ItemCard';
+import { getOpenTickets } from '../firebase/ticket';
 
 const itemsInUseData = [
   { name: 'Scissors', time: '5:06 pm', user: 'Anu Tao', icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/15f671324f37bfc292a1b3f7d57741fd37e5bc3a6166b230097c9d54ac3e673b?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208' },
@@ -9,8 +10,17 @@ const itemsInUseData = [
 ];
 
 const ItemsInUse = () => {
+  const [tickets, setTickets] = useState([])
+
+  const refresh = async () => {
+    const tx = await getOpenTickets();
+    console.log(tx);
+    setTickets(tx);
+  }
+
   return (
     <ItemsInUseContainer>
+      <button onClick={refresh}>Refresh</button>
       <SectionHeader>
         <Title>ITEMS IN USE</Title>
         <IconGroup>
@@ -22,11 +32,11 @@ const ItemsInUse = () => {
           </IconWrapper>
         </IconGroup>
       </SectionHeader>
-      <ItemList>
-        {itemsInUseData.map((item, index) => (
+      {tickets ? <ItemList>
+        {tickets.map((item, index) => (
           <ItemCard key={index} {...item} />
         ))}
-      </ItemList>
+      </ItemList> : <></>}
     </ItemsInUseContainer>
   );
 };

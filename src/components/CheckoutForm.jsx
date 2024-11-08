@@ -1,84 +1,48 @@
-import React, { useState } from "react";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { getAllTools } from "../firebase/tools";
 
 const default_form_state = {
-    name: "",
-    time: "",
-    user: "",
+    tool: ""
 }
 
 const CheckoutForm = () => {
-	// Define the state for each input field
-	const [formData, setFormData] = useState(default_form_state);
-    const db = getFirestore();
-	// Handle form submission
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		
-        try {
-            const docRef = await addDoc(collection(db, "tools"), formData)
-            console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-            console.error("Error adding document: ", e)
-        }
+  const [tools, setTools] = useState([]);
+  const [selectedItem, setSelectedItem] = useState("");
 
-        setFormData(default_form_state)
-		// You could also send this data to a backend here
-	};
+  useEffect(() => {
+	handleToolUpdate();
+  }, [])
 
-	// Handle input change
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
-	};
+  const handleToolUpdate = async () => {
+	const tempTools = await getAllTools();
+	setTools(tempTools.map((tool) => tool.name));
+  }
+  // Handle change in dropdown
+  const handleChange = (event) => {
+    setSelectedItem(event.target.value);
+  };
 
-	return (
-		<div>
-			<h2>Checkout Form</h2>
-			<form onSubmit={handleSubmit}>
-				<label>
-					Name:
-					<input
-						type="text"
-						name="name"
-						value={formData.name}
-						onChange={handleChange}
-						required
-					/>
-				</label>
-				<br />
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent page reload
+    alert(`You selected: ${selectedItem}`);
+  };
 
-				<label>
-					Tool:
-					<input
-						type="text"
-						name="tool"
-						value={formData.tool}
-						onChange={handleChange}
-						required
-					/>
-				</label>
-				<br />
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="dropdown">Select an option:</label>
+      <select id="dropdown" value={selectedItem} onChange={handleChange}>
+        <option value="">-- Please choose an option --</option>
+        {tools.map((item, index) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
 
-				<label>
-					Time:
-					<input
-						type="text"
-						name="time"
-						value={formData.time}
-						onChange={handleChange}
-						required
-					/>
-				</label>
-				<br />
-
-				<button type="submit">Submit</button>
-			</form>
-		</div>
-	);
+      <button type="submit" disabled={!selectedItem}>Submit</button>
+    </form>
+  );
 }
 
 export default CheckoutForm;
