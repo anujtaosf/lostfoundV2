@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SignIn, SignOut } from './Auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { getAuth } from 'firebase/auth';
+import { useAuth } from '../context/authContext';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-
-  const auth = getAuth();
-  const [user] = useAuthState(auth);
-
+  const { currentUser, userLoggedIn } = useAuth();
+  
   return (
     <HeaderContainer>
       <Link to="/">
@@ -18,9 +15,8 @@ const Header = () => {
       <UserInfo>
         <UserIcon src={"https://cdn.builder.io/api/v1/image/assets/TEMP/1394bf55adad9bce9b5db46599eb47259925b3b28609188c86776a691a908cdd?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208"} alt="User avatar" />
       </UserInfo>
-      Testing Auto Deploy
       <WelcomeMessage>
-        <Greeting>Good Morning{user ? `, ${user.displayName}` : ""}</Greeting>
+        <Greeting>Good Morning{userLoggedIn ? `, ${currentUser.displayName}` : ""}</Greeting>
         <DashboardInfo>
           Here's your Inventory Dashboard. Click{' '}
           <HomeLink href="/">here</HomeLink> to go back home
