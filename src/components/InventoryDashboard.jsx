@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './Header';
 import ItemsInUse from './ItemsInUse';
 import MissingItems from './MissingItems';
 import Notifications from './Notifications';
@@ -8,7 +7,6 @@ import Notifications from './Notifications';
 const InventoryDashboard = () => {
   return (
     <DashboardContainer>
-      <Header />
       <MainContent>
         <ItemsInUse />
         <MissingItems />
