@@ -7,7 +7,7 @@ export const AdminRoutes = () => {
     const {userRole} = useAuth();
     
     return (
-        userRole == "admin" ? <Outlet /> : <Landing />
+        userRole === "admin" ? <Outlet /> : <Landing />
     )
 }
 

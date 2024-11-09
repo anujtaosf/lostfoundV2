@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SignIn, SignOut } from './Auth';
-import { useAuth } from '../context/authContext';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
