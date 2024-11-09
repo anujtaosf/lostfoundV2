@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, doc, addDoc, Timestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, Timestamp } from "firebase/firestore";
 
 export const getOpenTickets = async () => {
     const q = query(collection(db, "tickets"), where("open", "==", true))

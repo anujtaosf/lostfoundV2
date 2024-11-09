@@ -20,10 +20,7 @@ const CheckoutForm = () => {
 		const tempTools = await getAllTools();
 		setTools(tempTools.map((tool) => tool.name));
 	};
-	// Handle change in dropdown
-	const handleChange = (event) => {
-		setSelectedTool(event.target.value);
-	};
+
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
