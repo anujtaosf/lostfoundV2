@@ -9,9 +9,6 @@ export const doSignInWithGoogle = async () => {
     } catch (e) {
         console.log(e);
     }
-    
-
-    
 }
 
 export const doSignOut = () => {

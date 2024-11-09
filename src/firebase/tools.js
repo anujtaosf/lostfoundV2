@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export const getAllTools = async () => {
     const querySnapshot = await getDocs(collection(db, "tools"));
@@ -10,4 +10,12 @@ export const getAllTools = async () => {
     })
 
     return tools
+}
+
+export const getTool = async (name) => {
+    const q = query(collection(db, "tools"), where("name", "==", name))
+    const querySnapshot = await getDocs(q)
+
+    const tool = querySnapshot.docs[0].data()
+    return tool
 }
