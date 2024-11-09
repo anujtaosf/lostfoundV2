@@ -7,7 +7,6 @@ export const getOpenTickets = async () => {
     
     let tickets = []
     querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
         tickets.push(doc.data())
     })
 
@@ -16,7 +15,7 @@ export const getOpenTickets = async () => {
 
 export const createTicket = async (ticket) => {
     ticket.created_at = Timestamp.fromDate(ticket.created_at)
-    
+
     const docRef = await addDoc(collection(db, "tickets"), ticket);
     console.log("Ticket written with ID: ", docRef.id);
 }

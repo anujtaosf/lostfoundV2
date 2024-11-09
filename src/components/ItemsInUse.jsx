@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { getOpenTickets } from '../firebase/ticket';
 import ItemInUseCard from './ItemInUseCard';
+import { getHoursSinceTimestamp, isTimestampToday } from '../lib/time';
 
 
 const itemsInUseData = [
@@ -16,12 +17,14 @@ const ItemsInUse = () => {
 
   useEffect(() => {
     refreshTickets();
-  })
+  }, [])
 
   const refreshTickets = async () => {
     const tx = await getOpenTickets();
-    console.log(tx);
-    setTickets(tx);
+    const todayTickets = tx.filter((ticket) => {
+      return isTimestampToday(ticket.created_at)
+    })
+    setTickets(todayTickets);
   }
 
   return (

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import MissingItemCard from './MissingItemCard';
+import { isTimestampToday } from '../lib/time';
+import { getOpenTickets } from '../firebase/ticket';
 
 const missingItemsData = [
   { name: 'Hacksaw', time: '30 hours', user: 'Faye', icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/869847049170febd1cbe668074b2ab2c025bb63aeb60e7b949205b9f0d9e0e52?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208' },
@@ -10,14 +12,28 @@ const missingItemsData = [
 ];
 
 const MissingItems = () => {
+  const [tickets, setTickets] = useState([])
+
+  useEffect(() => {
+    refreshTickets();
+  }, [])
+
+  const refreshTickets = async () => {
+    const tx = await getOpenTickets();
+    const todayTickets = tx.filter((ticket) => {
+      return !isTimestampToday(ticket.created_at)
+    })
+    setTickets(todayTickets);
+  }
+
   return (
     <MissingItemsContainer>
       <SectionHeader>
         <Title>MISSING ITEMS</Title>
       </SectionHeader>
       <ItemList>
-        {missingItemsData.map((item, index) => (
-          <MissingItemCard key={index} {...item} />
+        {tickets.map((ticket, index) => (
+          <MissingItemCard key={index} ticket={ticket} />
         ))}
       </ItemList>
     </MissingItemsContainer>
