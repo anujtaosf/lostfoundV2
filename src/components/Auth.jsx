@@ -1,25 +1,33 @@
-import React from "react"
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { doSignInWithGoogle, doSignOut } from "../firebase/auth";
+import { useAuth } from "../context/authContext";
 
 export const SignIn = () => {
+	const { userLoggedIn } = useAuth();
 
-    const auth = getAuth()
+	const signInWithGoogle = () => {
+		doSignInWithGoogle();
+	};
 
-    const signInWithGoogle = () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-    }
-
-    return !auth.currentUser && (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-    )
-}
+	return !userLoggedIn && <button onClick={signInWithGoogle}>Sign in with Google</button>;
+};
 
 export const SignOut = () => {
-    const auth = getAuth()
+	const { userLoggedIn } = useAuth();
+	const navigate = useNavigate();
 
-    return auth.currentUser && (
-    <button onClick={() => signOut(auth)}>Sign Out</button>
-    )
-}
+	return (
+		userLoggedIn && (
+			<button
+				onClick={() => {
+					doSignOut().then(() => {
+						navigate("/");
+					});
+				}}
+			>
+				Sign Out
+			</button>
+		)
+	);
+};

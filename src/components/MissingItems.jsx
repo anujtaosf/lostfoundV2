@@ -14,14 +14,6 @@ const MissingItems = () => {
     <MissingItemsContainer>
       <SectionHeader>
         <Title>MISSING ITEMS</Title>
-        <IconGroup>
-          <IconWrapper>
-            <Icon src="https://cdn.builder.io/api/v1/image/assets/TEMP/43c114a7d7c29a0f540f96ffab94249a561d4fba881afaa3f3eb29836aef55ea?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Filter icon" />
-          </IconWrapper>
-          <IconWrapper>
-            <Icon src="https://cdn.builder.io/api/v1/image/assets/TEMP/46d1f61e1ec0728f381ea00e0b78972b0ec941c6a42b6953a013f4b0a0872d43?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Sort icon" />
-          </IconWrapper>
-        </IconGroup>
       </SectionHeader>
       <ItemList>
         {missingItemsData.map((item, index) => (
@@ -37,7 +29,8 @@ const MissingItemsContainer = styled.section`
   min-width: 240px;
   flex-direction: column;
   justify-content: flex-start;
-  width: 439px;
+  padding: 0px 0px 20px 20px;
+  width: 325px;
 
   @media (max-width: 991px) {
     max-width: 100%;
@@ -46,9 +39,10 @@ const MissingItemsContainer = styled.section`
 
 const SectionHeader = styled.div`
   border-radius: 12px 12px 0 0;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.9);
   display: flex;
   width: 100%;
+  max-width: 369px;
   align-items: center;
   justify-content: space-between;
   padding: 20px 25px;
@@ -65,36 +59,15 @@ const Title = styled.h2`
   margin: 0;
 `;
 
-const IconGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`;
-
-const IconWrapper = styled.div`
-  border-radius: 100px;
-  background-color: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 41px;
-  height: 41px;
-  padding: 8px;
-`;
-
-const Icon = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-`;
-
 const ItemList = styled.div`
   border-radius: 0 0 12px 12px;
   background-color: rgba(255, 255, 255, 0.4);
   display: flex;
+  width: 100%;
+  padding: 20px 25px;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 25px;
+  align-items: center;
 
   @media (max-width: 991px) {
     padding: 20px;

@@ -2,31 +2,32 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
-import InventoryDashboard from './components/InventoryDashboard';
+import TicketsDashboard from './components/TicketsDashboard';
 import Layout from "./components/Layout"
+import Landing from './components/Landing';
 import CheckoutForm from "./components/CheckoutForm"
-
-import { initializeApp } from 'firebase/app';
-
-initializeApp({
-  apiKey: "AIzaSyAfouK7rufR-0RkkDAdNMbZrTEIuFoDE50",
-  authDomain: "lostfound-makerspace.firebaseapp.com",
-  projectId: "lostfound-makerspace",
-  storageBucket: "lostfound-makerspace.firebasestorage.app",
-  messagingSenderId: "52755277898",
-  appId: "1:52755277898:web:8ecffb215b6031ec6c5eb3",
-  measurementId: "G-93D2S4C08N"
-})
+import { AdminRoutes, UserRoutes } from './components/Routes';
+import { AuthProvider } from './context/authContext';
 
 function App() {
   
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<InventoryDashboard/>}/>
-        <Route path="/checkout" element={<CheckoutForm/>}/>
-      </Route>
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Landing />} />
+
+          <Route element={<AdminRoutes />}>
+            <Route path='/dashboard' element={<TicketsDashboard/>}/>
+          </Route>
+
+          <Route element={<UserRoutes />}>
+            <Route path="/checkout" element={<CheckoutForm/>}/>
+          </Route>
+
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
 
