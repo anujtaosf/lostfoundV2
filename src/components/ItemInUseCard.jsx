@@ -1,7 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { formatTimestampToTime } from '../lib/time';
 
-const ItemInUseCard = ({ name, time, user, icon }) => {
+const icons = {
+  1: 'https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
+  2: 'https://cdn.builder.io/api/v1/image/assets/TEMP/869847049170febd1cbe668074b2ab2c025bb63aeb60e7b949205b9f0d9e0e52?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
+  3: 'https://cdn.builder.io/api/v1/image/assets/TEMP/75ed8eaf3767cf4017c612551ed700799f398e667cba11c1d94dfb8518504b09?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208'
+}
+
+const ItemInUseCard = ({ ticket }) => {
+  const icon = icons[ticket.tool_rating]
+  const name = ticket.tool
+  const time = formatTimestampToTime(ticket.created_at);
+  const user = ticket.user
+
   return (
     <CardContainer>
       <ItemInfo>

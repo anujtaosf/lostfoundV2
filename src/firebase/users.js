@@ -10,10 +10,10 @@ export const getUserData = async (user) => {
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {
-        console.log(`Retrieving ${getUniqname(user)} from database`)
+        //console.log(`Retrieving ${getUniqname(user)} from database`)
 		return docSnap.data();
 	} else {
-        console.log(`Creating ${getUniqname(user)}`)
+        //console.log(`Creating ${getUniqname(user)}`)
 		return createUser(user);
 	}
 };
