@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './Header';
 import ItemsInUse from './ItemsInUse';
 import MissingItems from './MissingItems';
 import Notifications from './Notifications';
+import { useAuth } from '../context/authContext';
 
 const TicketsDashboard = () => {
+
+  const { userData } = useAuth();
+  
   return (
     <DashboardContainer>
-      <Header />
       <WelcomeMessage>
         <Greeting>Hello Blake,</Greeting>
         <DashboardInfo>

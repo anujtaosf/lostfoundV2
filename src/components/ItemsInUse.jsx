@@ -21,7 +21,6 @@ const ItemsInUse = () => {
 
   return (
     <ItemsInUseContainer>
-      <button onClick={refresh}>Refresh</button>
       <SectionHeader>
         <Title>ITEMS IN USE</Title>
       </SectionHeader>

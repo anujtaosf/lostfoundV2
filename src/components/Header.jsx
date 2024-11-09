@@ -9,12 +9,15 @@ const Header = () => {
   
   return (
     <HeaderContainer>
-      <Link to="/">
+      <Link to="/dashboard">
         <Logo>LostAndFound+</Logo>
       </Link>
       <UserInfo>
+        <SignIn />
+        <SignOut />
         <UserIcon src={"https://cdn.builder.io/api/v1/image/assets/TEMP/1394bf55adad9bce9b5db46599eb47259925b3b28609188c86776a691a908cdd?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208"} alt="User avatar" />
       </UserInfo>
+      
     </HeaderContainer>
   );
 };
