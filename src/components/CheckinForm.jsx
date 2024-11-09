@@ -11,13 +11,13 @@ const CheckoutForm = () => {
 	const { currentUser } = useAuth();
 
 	useEffect(() => {
-		handleGetTickets();
-	}, []);
+        const handleGetTickets = async () => {
+            const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
+            setTickets(tickets);
+        };
 
-	const handleGetTickets = async () => {
-		const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
-		setTickets(tickets);
-	};
+		handleGetTickets();
+	}, [currentUser]);
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
