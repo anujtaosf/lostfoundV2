@@ -5,7 +5,6 @@ import { useAuth } from '../context/authContext';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-  const { currentUser, userLoggedIn } = useAuth();
   
   return (
     <HeaderContainer>

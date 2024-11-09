@@ -7,12 +7,17 @@ import { useAuth } from '../context/authContext';
 
 const TicketsDashboard = () => {
 
-  const { userData } = useAuth();
-  
+  const { userLoggedIn, userData } = useAuth();
+
   return (
     <DashboardContainer>
       <WelcomeMessage>
-        <Greeting>Hello Blake,</Greeting>
+        {
+          userLoggedIn ?
+          <Greeting>Hello {userData.name.split(" ")[0]},</Greeting>
+          :
+          <Greeting>Hello,</Greeting>
+        }
         <DashboardInfo>
           Here's your Tickets Dashboard. Click{' '}
           <HomeLink href="/">here</HomeLink> to go back home

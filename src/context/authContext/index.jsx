@@ -3,7 +3,7 @@ import React, { createContext } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUserData } from "../../firebase/users";
-import { doSignInWithGoogle, doSignOut } from "../../firebase/auth";
+import { doSignOut } from "../../firebase/auth";
 
 const AuthContext = createContext();
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	const initializeUser = async (user) => {
-        if (user && user.email.split(/\@|\./)[1] != "umich") {
+        if (user && user.email.split(/@|\./)[1] !== "umich") {
             doSignOut();
             return
         }

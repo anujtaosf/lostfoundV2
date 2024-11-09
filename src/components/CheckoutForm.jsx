@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllTools } from "../firebase/tools";
 
-const default_form_state = {
-    tool: ""
-}
 
 const CheckoutForm = () => {
   const [tools, setTools] = useState([]);

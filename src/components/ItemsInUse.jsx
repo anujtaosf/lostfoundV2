@@ -11,13 +11,14 @@ const itemsInUseData = [
 ];
 
 const ItemsInUse = () => {
+  /*
   const [tickets, setTickets] = useState([])
 
   const refresh = async () => {
     const tx = await getOpenTickets();
     console.log(tx);
     setTickets(tx);
-  }
+  }*/
 
   return (
     <ItemsInUseContainer>
