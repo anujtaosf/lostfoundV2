@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-//import { getOpenTickets } from '../firebase/ticket';
+import { getOpenTickets } from '../firebase/ticket';
 import ItemInUseCard from './ItemInUseCard';
 
 
@@ -11,14 +11,18 @@ const itemsInUseData = [
 ];
 
 const ItemsInUse = () => {
-  /*
+  
   const [tickets, setTickets] = useState([])
 
-  const refresh = async () => {
+  useEffect(() => {
+    refreshTickets();
+  })
+
+  const refreshTickets = async () => {
     const tx = await getOpenTickets();
     console.log(tx);
     setTickets(tx);
-  }*/
+  }
 
   return (
     <ItemsInUseContainer>
@@ -26,8 +30,8 @@ const ItemsInUse = () => {
         <Title>ITEMS IN USE</Title>
       </SectionHeader>
       <ItemList>
-        {itemsInUseData.map((item, index) => (
-          <ItemInUseCard key={index} {...item} />
+        {tickets.map((ticket, index) => (
+          <ItemInUseCard key={index} ticket={ticket} />
         ))}
       </ItemList>
     </ItemsInUseContainer>
