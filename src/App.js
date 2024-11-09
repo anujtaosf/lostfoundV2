@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
-import InventoryDashboard from './components/InventoryDashboard';
+import TicketsDashboard from './components/TicketsDashboard';
 import Layout from "./components/Layout"
 import Landing from './components/Landing';
 import CheckoutForm from "./components/CheckoutForm"
@@ -18,7 +18,7 @@ function App() {
           <Route index element={<Landing />} />
 
           <Route element={<AdminRoutes />}>
-            <Route path='/dashboard' element={<InventoryDashboard/>}/>
+            <Route path='/dashboard' element={<TicketsDashboard/>}/>
           </Route>
 
           <Route element={<UserRoutes />}>
