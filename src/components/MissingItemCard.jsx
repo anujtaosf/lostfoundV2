@@ -33,7 +33,7 @@ const MissingItemCard = ({ ticket }) => {
       <ItemDetails>
         <DetailGroup>
           <DetailIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/2978a3e3fd74e3d25968f47abcb5308d762f64b6cea9ede331bceaa5cc678b37?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Time icon" />
-          <DetailText>{time}</DetailText>
+          <DetailText>{time} hrs</DetailText>
         </DetailGroup>
         <DetailGroup marginTop="21px">
           <DetailIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/27fb37158bb14cafed6d3137657c9e85e27b1a9eafd4da3b78dbe895d02651ad?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="User icon" />
