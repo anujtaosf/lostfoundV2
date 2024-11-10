@@ -4,7 +4,7 @@ import { useAuth } from "../context/authContext";
 import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
 
 const CheckoutForm = () => {
-	const [tickets, setTickets] = useState({});
+	const [tickets, setTickets] = useState([]);
 	const [selectedTicket, setSelectedTicket] = useState("");
 	const [isBroken, setIsBroken] = useState(false);
 
@@ -37,9 +37,9 @@ const CheckoutForm = () => {
 				}}
 			>
 				<option value="">-- Please choose an option --</option>
-				{Object.keys(tickets).map((ticket, index) => (
-					<option key={index} value={ticket}>
-						{tickets[ticket].tool}
+				{tickets.map((ticket, index) => (
+					<option key={index} value={ticket.id}>
+						{ticket.tool}
 					</option>
 				))}
 			</select>

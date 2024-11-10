@@ -7,7 +7,7 @@ export const getOpenTickets = async () => {
     
     let tickets = []
     querySnapshot.forEach((doc) => {
-        tickets.push(doc.data())
+        tickets.push({"id": doc.id, ...doc.data()})
     })
 
     return tickets
@@ -17,9 +17,9 @@ export const getOpenTicketsFromUser = async (user) => {
     const q = query(collection(db, "tickets"), where("open", "==", true), where("user", "==", user));
     const querySnapshot = await getDocs(q);
     
-    let tickets = {}
+    let tickets = []
     querySnapshot.forEach((doc) => {
-        tickets[doc.id] = doc.data();
+        tickets.push({"id": doc.id, ...doc.data()})
     })
 
     return tickets

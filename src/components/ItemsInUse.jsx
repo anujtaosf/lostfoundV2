@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import { getOpenTickets } from '../firebase/ticket';
-import ItemInUseCard from './ItemInUseCard';
-import { isTimestampToday } from '../lib/time';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { getOpenTickets } from "../firebase/ticket";
+import ItemInUseCard from "./ItemInUseCard";
+import { isTimestampToday } from "../lib/time";
 
 /*
 const itemsInUseData = [
@@ -13,79 +13,76 @@ const itemsInUseData = [
 */
 
 const ItemsInUse = () => {
-  
-  const [tickets, setTickets] = useState([])
+	const [tickets, setTickets] = useState([]);
 
-  useEffect(() => {
-    refreshTickets();
-  }, [])
+	useEffect(() => {
+		refreshTickets();
+	}, []);
 
-  const refreshTickets = async () => {
-    const tx = await getOpenTickets();
-    const todayTickets = tx.filter((ticket) => {
-      return isTimestampToday(ticket.created_at)
-    })
-    setTickets(todayTickets);
-  }
+	const refreshTickets = async () => {
+		const tx = await getOpenTickets();
+		const todayTickets = tx.filter(ticket => isTimestampToday(ticket.created_at))
+		setTickets(todayTickets);
+	};
 
-  return (
-    <ItemsInUseContainer>
-      <SectionHeader>
-        <Title>ITEMS IN USE</Title>
-      </SectionHeader>
-      <ItemList>
-        {tickets.map((ticket, index) => (
-          <ItemInUseCard key={index} ticket={ticket} />
-        ))}
-      </ItemList>
-    </ItemsInUseContainer>
-  );
+	return (
+		<ItemsInUseContainer>
+			<SectionHeader>
+				<Title>ITEMS IN USE</Title>
+			</SectionHeader>
+			<ItemList>
+				{tickets.map((ticket, index) => (
+					<ItemInUseCard key={index} ticket={ticket} />
+				))}
+			</ItemList>
+		</ItemsInUseContainer>
+	);
 };
 
 const ItemsInUseContainer = styled.section`
-  display: flex;
-  min-width: 240px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 369px;
+	display: flex;
+	min-width: 240px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	width: 369px;
 `;
 
 const SectionHeader = styled.div`
-  border-radius: 12px 12px 0 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  width: 100%;
-  max-width: 369px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 25px;
+	border-radius: 12px 12px 0 0;
+	background-color: rgba(255, 255, 255, 0.9);
+	display: flex;
+	width: 100%;
+	max-width: 369px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 25px;
 
-  @media (max-width: 991px) {
-    padding: 20px;
-  }
+	@media (max-width: 991px) {
+		padding: 20px;
+	}
 `;
 
 const Title = styled.h2`
-  color: #000;
-  text-align: center;
-  font: 700 22px Inter, sans-serif;
-  margin: 0;
+	color: #000;
+	text-align: center;
+	font: 700 22px Inter, sans-serif;
+	margin: 0;
 `;
 
 const ItemList = styled.div`
-  border-radius: 0 0 12px 12px;
-  background-color: rgba(255, 255, 255, 0.4);
-  display: flex;
-  width: 100%;
-  padding: 20px 25px;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
+	border-radius: 0 0 12px 12px;
+	background-color: rgba(255, 255, 255, 0.4);
+	display: flex;
+	width: 100%;
+	padding: 20px 25px;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
 
-  @media (max-width: 991px) {
-    padding: 20px;
-  }
+	@media (max-width: 991px) {
+		padding: 20px;
+	}
 `;
 
 export default ItemsInUse;
