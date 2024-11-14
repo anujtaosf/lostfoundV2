@@ -110,7 +110,11 @@ const Formlabel = styled.label`
 
 const Description = styled.label`
 	font-size: 18px;
-	margin: 0px 10px 0px 0px;
+	margin: 0px 10px 10px 0px;
+	border-style: hidden hidden dotted hidden;
+	border-width: 4px;
+	border-color: rgba(0, 0, 0, 0.3);
+	padding-bottom: 8px;
 `;
 
 const Fieldlabel = styled.label`
