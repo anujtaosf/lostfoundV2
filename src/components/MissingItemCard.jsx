@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
 import { formatTimestampToDuration } from '../lib/time';
-import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
+import { closeTicket} from "../firebase/ticket";
 
 const icons = {
   1: 'https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
@@ -14,9 +14,6 @@ const MissingItemCard = ({ ticket }) => {
   const name = ticket.tool
   const time = formatTimestampToDuration(ticket.created_at);
   const user = ticket.user
-
-  const [selectedTicket] = useState("");
-
 
   const DismissClick = async (e) =>{
     e.preventDefault(); // Prevent page reload
