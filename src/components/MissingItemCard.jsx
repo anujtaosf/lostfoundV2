@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from 'styled-components';
 import { formatTimestampToDuration } from '../lib/time';
 import { closeTicket} from "../firebase/ticket";
