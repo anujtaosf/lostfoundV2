@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 import styled from 'styled-components';
 import { formatTimestampToDuration } from '../lib/time';
+import { closeTicket} from "../firebase/ticket";
 
 const icons = {
   1: 'https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
@@ -14,6 +15,16 @@ const MissingItemCard = ({ ticket }) => {
   const time = formatTimestampToDuration(ticket.created_at);
   const user = ticket.user
 
+  const DismissClick = async (e) =>{
+    e.preventDefault(); // Prevent page reload
+    closeTicket("9y5CoDPAi7ZykVOIStb5"); // TODO:  Need to figure out how to get id
+  };
+
+  const ContactClick = () =>{
+    const email = user + "@umich.edu"
+    console.log(email)
+  };
+
   return (
     <CardContainer>
       <ItemInfo>
@@ -21,11 +32,11 @@ const MissingItemCard = ({ ticket }) => {
         <ItemIcon src={icon} alt={`${name} icon`} />
       </ItemInfo>
       <ActionButtons>
-        <ActionButton color="#E07B7B">
+        <ActionButton onClick={DismissClick} color="#E07B7B">
           <ButtonIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/e59ad9e6f2ce0204f143d5e1d323a093335b061c0c2a8e996f1af784f18cbddf?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Dismiss icon" />
           DISMISS
         </ActionButton>
-        <ActionButton color="#69B984">
+        <ActionButton onClick={ContactClick} color="#69B984">
           <ButtonIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/3ef5d023992f3dcd56c5ca590a6975bbc4bbace83c6f2e5238a132929db165e0?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Contact icon" />
           CONTACT
         </ActionButton>
@@ -92,6 +103,11 @@ const ActionButton = styled.button`
   padding: 5px 10px;
   border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const ButtonIcon = styled.img`
