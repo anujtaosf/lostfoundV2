@@ -35,7 +35,7 @@ const MissingItems = () => {
       </SectionHeader>
       <ItemList>
         {tickets.map((ticket, index) => (
-          <MissingItemCard key={index} ticket={ticket} />
+          <MissingItemCard key={index} ticket={ticket} refreshTickets={refreshTickets} />
         ))}
       </ItemList>
     </MissingItemsContainer>

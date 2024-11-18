@@ -34,7 +34,6 @@ const CheckoutForm = () => {
 		const open = true;
 
 		const toolInfo = await getTool(tool);
-		console.log(toolInfo)
 		const tool_rating = toolInfo?.rating || 1;
 
 		const ticket = {

@@ -9,7 +9,7 @@ const icons = {
   3: 'https://cdn.builder.io/api/v1/image/assets/TEMP/75ed8eaf3767cf4017c612551ed700799f398e667cba11c1d94dfb8518504b09?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208'
 }
 
-const MissingItemCard = ({ ticket }) => {
+const MissingItemCard = ({ ticket, refreshTickets }) => {
   const icon = icons[ticket.tool_rating]
   const name = ticket.tool
   const time = formatTimestampToDuration(ticket.created_at);
@@ -17,7 +17,8 @@ const MissingItemCard = ({ ticket }) => {
 
   const DismissClick = async (e) =>{
     e.preventDefault(); // Prevent page reload
-    closeTicket("9y5CoDPAi7ZykVOIStb5"); // TODO:  Need to figure out how to get id
+    closeTicket(ticket.id); // TODO:  Need to figure out how to get id
+    refreshTickets();
   };
 
   const ContactClick = () =>{

@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import { getUniqname } from "../firebase/users";
 import { useAuth } from "../context/authContext";
 import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const CheckoutForm = () => {
-	const [tickets, setTickets] = useState({});
+	const [tickets, setTickets] = useState([]);
 	const [selectedTicket, setSelectedTicket] = useState("");
 	const [isBroken, setIsBroken] = useState(false);
 
 	const { currentUser } = useAuth();
 
 	useEffect(() => {
-        const handleGetTickets = async () => {
-            const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
-            setTickets(tickets);
-        };
+		const handleGetTickets = async () => {
+			const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
+			setTickets(tickets);
+		};
 
 		handleGetTickets();
 	}, [currentUser]);
@@ -24,14 +24,17 @@ const CheckoutForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
 
-        closeTicket(selectedTicket);
+		closeTicket(selectedTicket);
 	};
 
 	return (
 		<Container>
 			<Checkin onSubmit={handleSubmit}>
 				<Formlabel>Tool Check-in Form</Formlabel>
-				<Description>Thank you for returning the tool! Please choose the tool you are checking in below</Description>
+				<Description>
+					Thank you for returning the tool! Please choose the tool you are checking in
+					below
+				</Description>
 				<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
 				<Select
 					id="dropdown"
@@ -41,9 +44,9 @@ const CheckoutForm = () => {
 					}}
 				>
 					<option value="">-- Please choose an option --</option>
-					{Object.keys(tickets).map((ticket, index) => (
-						<option key={index} value={ticket}>
-							{tickets[ticket].tool}
+					{tickets.map((ticket, index) => (
+						<option key={index} value={ticket.id}>
+							{ticket.tool}
 						</option>
 					))}
 				</Select>
@@ -68,7 +71,6 @@ const CheckoutForm = () => {
 	);
 };
 
-
 const Container = styled.div`
 	width: 100%;
 	padding: 40px 20px;
@@ -92,7 +94,6 @@ const Formlabel = styled.label`
 	font-size: 32px;
 	font-weight: bold;
 	margin: 10px 0px 0px 0px;
-	
 `;
 
 const Description = styled.label`
@@ -108,7 +109,6 @@ const Fieldlabel = styled.label`
 	font-size: 24px;
 	font-weight: bold;
 	margin: 10px 10px;
-	
 `;
 
 const Select = styled.select`
@@ -120,16 +120,15 @@ const Select = styled.select`
 	border-radius: 6px;
 
 	&:focus {
-    outline: none;
-    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-  	}
-	
+		outline: none;
+		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+	}
 `;
 
 const SubmitButton = styled.button`
 	padding: 10px 20px;
 	font-size: 14px;
-	background-color: #4CAF50;
+	background-color: #4caf50;
 	color: white;
 	border: none;
 	border-radius: 8px;
@@ -137,15 +136,13 @@ const SubmitButton = styled.button`
 	margin: 10px;
 	transition: all 0.2s ease;
 
-
 	&:disabled {
 		background-color: #ccc;
 		cursor: not-allowed;
 	}
 	&:hover:not(:disabled) {
-    transform: scale(1.05);
-  	}
-
+		transform: scale(1.05);
+	}
 `;
 
 export default CheckoutForm;
