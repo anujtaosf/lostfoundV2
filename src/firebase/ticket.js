@@ -28,7 +28,7 @@ export const getOpenTicketsFromUser = async (user) => {
 export const createTicket = async (ticket) => {
     ticket.created_at = Timestamp.fromDate(ticket.created_at)
 
-    const docRef = await addDoc(collection(db, "tickets"), ticket);
+    await addDoc(collection(db, "tickets"), ticket);
 }
 
 export const closeTicket = async (ticket_id) => {
