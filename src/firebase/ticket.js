@@ -29,7 +29,6 @@ export const createTicket = async (ticket) => {
     ticket.created_at = Timestamp.fromDate(ticket.created_at)
 
     const docRef = await addDoc(collection(db, "tickets"), ticket);
-    console.log("Ticket written with ID: ", docRef.id);
 }
 
 export const closeTicket = async (ticket_id) => {
