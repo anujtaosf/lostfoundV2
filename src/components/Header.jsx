@@ -5,32 +5,23 @@ import { Link, useLocation} from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
 const Header = () => {
-	const { currentUser, userLoggedIn } = useAuth();
+	const { currentUser, userLoggedIn, userRole} = useAuth();
 	const location = useLocation();
 
 	return (
 		<HeaderContainer>
 			<Logo>LostAndFound+</Logo>
-			<NavbarContainer>
 			{
 				userLoggedIn ?
-				<NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem>
+				<NavbarContainer>
+					{userRole == "admin" ? <NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem> : <></>}
+
+					<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Checkout</NavItem>
+					<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Checkin</NavItem>
+				</NavbarContainer>
 				:
-				<NavItem></NavItem>
+				<NavbarContainer></NavbarContainer>
 			}
-			{
-				userLoggedIn ?
-				<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Checkout</NavItem>
-				:
-				<NavItem></NavItem>
-			}
-			{
-				userLoggedIn ?
-				<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Checkin</NavItem>
-				:
-				<NavItem></NavItem>
-			}
-			</NavbarContainer>
 			<UserInfo>
 				<SignIn />
 				<SignOut />
@@ -79,6 +70,7 @@ const UserIcon = styled.img`
 
 const NavbarContainer = styled.div`
   display: flex;
+  align-items: center;
   gap: 40px;
   text-decoration: none;
 `;
