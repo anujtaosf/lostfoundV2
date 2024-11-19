@@ -81,6 +81,11 @@ const NavbarContainer = styled.div`
   display: flex;
   gap: 40px;
   text-decoration: none;
+
+  @media (max-width: 991px) {
+		max-width: 60%;
+		padding: 12px;
+  	}
 `;
 
 const NavItem = styled(Link)`

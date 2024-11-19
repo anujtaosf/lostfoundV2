@@ -137,7 +137,7 @@ const Checkin = styled.form`
 	gap: 4px;
 
 	@media (max-width: 991px) {
-		max-width: 80%
+		max-width: 70%;
 		padding: 12px;
   	}
 `;
