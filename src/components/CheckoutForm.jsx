@@ -86,6 +86,12 @@ const Container = styled.div`
 	padding: 40px 20px;
 	display: flex;
 	justify-content: center;
+
+	@media (max-width: 991px) {
+		width: 100%;
+		padding: 40px 40px;
+		justify-content: center;
+	}
 `;
 
 const Checkout = styled.form`
@@ -98,6 +104,11 @@ const Checkout = styled.form`
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+
+	@media (max-width: 991px) {
+		max-width: 80%
+		padding: 12px;
+  	}
 `;
 
 const Formlabel = styled.label`

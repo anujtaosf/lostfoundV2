@@ -1,21 +1,36 @@
 import React from "react";
 import styled from "styled-components";
 import { SignIn, SignOut } from "./Auth";
-import { Link } from "react-router-dom";
+import { Link, useLocation} from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
 const Header = () => {
 	const { currentUser, userLoggedIn } = useAuth();
+	const location = useLocation();
 
 	return (
 		<HeaderContainer>
 			<Logo>LostAndFound+</Logo>
 			<NavbarContainer>
-				<Link to="/dashboard">Dashboard</Link>
-				<Link to="/checkout">Checkout</Link>
-				<Link to="/checkin">Checkin</Link>
+			{
+				userLoggedIn ?
+				<NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem>
+				:
+				<NavItem></NavItem>
+			}
+			{
+				userLoggedIn ?
+				<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Checkout</NavItem>
+				:
+				<NavItem></NavItem>
+			}
+			{
+				userLoggedIn ?
+				<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Checkin</NavItem>
+				:
+				<NavItem></NavItem>
+			}
 			</NavbarContainer>
-
 			<UserInfo>
 				<SignIn />
 				<SignOut />
@@ -27,11 +42,12 @@ const Header = () => {
 
 const HeaderContainer = styled.header`
 	display: flex;
-	width: 95%;
+	width: 100%;
 	align-items: center;
 	gap: 40px 100px;
 	justify-content: space-between;
-	flex-wrap: wrap;
+	flex-direction: row;
+	background-color: #f0f0f0;
 
 	@media (max-width: 991px) {
 		max-width: 100%;
@@ -41,31 +57,50 @@ const HeaderContainer = styled.header`
 const Logo = styled.div`
 	color: #000;
 	align-self: stretch;
-	margin: auto 0;
+	margin: auto 20px;
 	font: 550 24px SansSerifBldFLF, sans-serif;
 `;
 
 const UserInfo = styled.div`
-	align-self: stretch;
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	gap: 25px;
 	justify-content: center;
-	margin: auto 0;
+	margin: auto 20px;
 `;
 
 const UserIcon = styled.img`
 	aspect-ratio: 1;
-	object-fit: contain;
 	object-position: center;
-	width: 75px;
-	border-radius: 136px;
+	width: 40px;
+	margin: 10px 20px 10px 0px;
+	border-radius: 100px;
 `;
 
 const NavbarContainer = styled.div`
   display: flex;
   gap: 40px;
   text-decoration: none;
-`
+`;
+
+const NavItem = styled(Link)`
+	text-decoration: none;
+	color: #C0C0C0;
+	padding: 10px 20px;
+	border-radius: 8px;
+	background-color: none;
+
+	&:hover{
+		color: #C1930B;
+	}
+	
+	${({ isActive }) =>
+		isActive &&
+		`
+		color: #C1930B;
+		background-color: #FFF7DF;
+		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.05);
+	`}
+`;
 
 export default Header;
