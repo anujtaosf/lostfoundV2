@@ -3,11 +3,13 @@ import { getUniqname } from "../firebase/users";
 import { useAuth } from "../context/authContext";
 import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
 import styled from "styled-components";
+import { createNotification } from "../firebase/notifications";
 
 const CheckoutForm = () => {
 	const [tickets, setTickets] = useState([]);
 	const [selectedTicket, setSelectedTicket] = useState("");
 	const [isBroken, setIsBroken] = useState(false);
+	const [brokenDescription, setBrokenDescription] = useState("");
 
 	const { currentUser } = useAuth();
 
@@ -25,7 +27,29 @@ const CheckoutForm = () => {
 		e.preventDefault(); // Prevent page reload
 
 		closeTicket(selectedTicket);
+		if (isBroken) {
+			createNotification({
+				created_at: new Date(),
+				description: brokenDescription,
+				user: getUniqname(currentUser),
+				type: "broken",
+				ticket: selectedTicket,
+				open: true,
+			})
+		}
+
+		const handleGetTickets = async () => {
+			const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
+			setTickets(tickets);
+		};
+
+		handleGetTickets();
+		setSelectedTicket("");
+		setIsBroken(false);
+		setBrokenDescription("");
 	};
+
+	
 
 	return (
 		<Container>
@@ -61,6 +85,23 @@ const CheckoutForm = () => {
 					/>
 					Is the tool broken?
 				</Fieldlabel>
+				<br />
+
+				{isBroken ? (
+					<>
+						<Fieldlabel htmlFor="brokenDescription">Description:</Fieldlabel>
+						<input
+							type="text"
+							id="brokenDescription"
+							value={brokenDescription}
+							placeholder="Describe how the item broke"
+							onChange={(e) => setBrokenDescription(e.target.value)}
+						/>
+					</>
+				) : (
+					<></>
+				)}
+
 				<br />
 
 				<SubmitButton type="submit" disabled={!selectedTicket}>
