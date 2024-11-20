@@ -74,6 +74,7 @@ const Column = styled.div`
 
 const WelcomeMessage = styled.div`
   display: flex;
+  margin-top: 30px;
   width: 95%;
   flex-direction: column;
   color: #000;

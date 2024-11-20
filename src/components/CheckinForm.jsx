@@ -117,6 +117,12 @@ const Container = styled.div`
 	padding: 40px 20px;
 	display: flex;
 	justify-content: center;
+
+	@media (max-width: 991px) {
+		width: 100%;
+		padding: 40px 40px;
+		justify-content: center;
+	}
 `;
 
 const Checkin = styled.form`
@@ -129,6 +135,11 @@ const Checkin = styled.form`
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+
+	@media (max-width: 991px) {
+		max-width: 70%;
+		padding: 12px;
+  	}
 `;
 
 const Formlabel = styled.label`
