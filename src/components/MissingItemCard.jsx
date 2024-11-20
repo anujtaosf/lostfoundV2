@@ -2,6 +2,7 @@ import React from "react";
 import styled from 'styled-components';
 import { formatTimestampToDuration } from '../lib/time';
 import { closeTicket} from "../firebase/ticket";
+import { createEmail} from "../firebase/mail";
 
 const icons = {
   1: 'https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
@@ -14,6 +15,7 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
   const name = ticket.tool
   const time = formatTimestampToDuration(ticket.created_at);
   const user = ticket.user
+  const location = ticket.location
 
   const DismissClick = async (e) =>{
     e.preventDefault(); // Prevent page reload
@@ -21,9 +23,27 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
     refreshTickets();
   };
 
-  const ContactClick = () =>{
-    const email = user + "@umich.edu"
-    console.log(email)
+  const ContactClick = async (e) =>{
+    e.preventDefault();
+    const email_address = user + "@umich.edu";
+    const reminder_message = "Hello, this is a reminder to please return " + name + " to " + location;
+    const subject = "Important Message from WSPTC Staff"
+
+    const email = {
+			to: [email_address],
+      message: {
+        subject: subject,
+        text: reminder_message,
+        html: reminder_message
+      },
+
+      timestamp: new Date(),
+    
+      // Add status field for tracking email state
+      status: 'pending'
+		};
+    console.log("contact_clicked");
+    createEmail(email);
   };
 
   return (
