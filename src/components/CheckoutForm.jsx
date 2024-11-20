@@ -46,7 +46,8 @@ const CheckoutForm = () => {
 		}
 
 		createTicket(ticket);
-
+		setSelectedTool("");
+		setSelectedLocation("");
 	};
 
 	return (
