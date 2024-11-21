@@ -103,19 +103,21 @@ const CheckoutForm = () => {
 						))}
 					</Select>
 					<br />
-					<SubmitButton type="submit" disabled={!selectedTool || !selectedLocation}>
-						Submit
-					</SubmitButton>
-			
 					{statusMessage ? (
 						<>
 							<StatusMessage>{statusMessage}</StatusMessage>
 							<StatusMessage>Check-out another tool above or please sign out below</StatusMessage>
-							<SubmitButton onClick={handleSignOut}>Sign Out</SubmitButton>
+							
 						</>
 					) : (
 						<></>
 					)}
+
+					<SubmitButton type="submit" disabled={!selectedTool || !selectedLocation}>
+						Submit
+					</SubmitButton>
+					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+					
 				</Checkout>
 			)}
 		</Container>
@@ -191,6 +193,26 @@ const SubmitButton = styled.button`
 	padding: 10px 20px;
 	font-size: 14px;
 	background-color: #4caf50;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	margin: 10px;
+	transition: all 0.2s ease;
+
+	&:disabled {
+		background-color: #ccc;
+		cursor: not-allowed;
+	}
+	&:hover:not(:disabled) {
+		transform: scale(1.05);
+	}
+`;
+
+const SignOutButton = styled.button`
+	padding: 10px 20px;
+	font-size: 14px;
+	background-color: #FF0000;
 	color: white;
 	border: none;
 	border-radius: 8px;
