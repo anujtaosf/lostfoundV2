@@ -12,15 +12,12 @@ const Header = () => {
 		<HeaderContainer>
 			<Logo>LostAndFound+</Logo>
 			{
-				userLoggedIn ?
 				<NavbarContainer>
 					{userRole === "admin" ? <NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem> : <></>}
 
 					<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Check-out</NavItem>
 					<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Check-in</NavItem>
 				</NavbarContainer>
-				:
-				<NavbarContainer></NavbarContainer>
 			}
 			<UserInfo>
 				<SignIn />

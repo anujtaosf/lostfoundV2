@@ -10,7 +10,7 @@ export const SignIn = () => {
 		doSignInWithGoogle();
 	};
 
-	return !userLoggedIn && <button onClick={signInWithGoogle}>Sign in with Google</button>;
+	return !userLoggedIn && <button onClick={signInWithGoogle}>Admin Sign In</button>;
 };
 
 export const SignOut = () => {

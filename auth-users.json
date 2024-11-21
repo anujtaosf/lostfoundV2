@@ -1,0 +1,73 @@
+{"users": [
+{
+  "localId": "BCQlOa3z2sV9wgjYIzfDfhTI75k1",
+  "email": "niomo@umich.edu",
+  "emailVerified": true,
+  "displayName": "Naomi Jaroslaw",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKza4dlBlCuxdlbPwgjcstJzeE1Jh2ucza9jUZAfXRiALUC3aQ=s96-c",
+  "lastSignedInAt": "1732076234202",
+  "createdAt": "1732076234201",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "107162882139150616237",
+      "email": "niomo@umich.edu",
+      "displayName": "Naomi Jaroslaw",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKza4dlBlCuxdlbPwgjcstJzeE1Jh2ucza9jUZAfXRiALUC3aQ=s96-c"
+    }
+  ]
+},
+{
+  "localId": "NcLlTUMS3gckufp0wwaOCCIy9fB3",
+  "email": "atxweaver@gmail.com",
+  "emailVerified": true,
+  "displayName": "Luke Weaver",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocLyJzW-7-L06vwgwjggi9cfy1Xs7tL-FiciLX2miB677X7riz8=s96-c",
+  "lastSignedInAt": "1731105950736",
+  "createdAt": "1731105403144",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "108177237200003489757",
+      "email": "atxweaver@gmail.com",
+      "displayName": "Luke Weaver",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocLyJzW-7-L06vwgwjggi9cfy1Xs7tL-FiciLX2miB677X7riz8=s96-c"
+    }
+  ]
+},
+{
+  "localId": "O3c4tpw90iSqDntbuC8igt1GWmZ2",
+  "email": "ljweaver@umich.edu",
+  "emailVerified": true,
+  "displayName": "Luke Weaver",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocJj5dQtLAzPFju_hNoLEtqAYK8lnsCaeaJJr-oWYH-ZzDRpywc=s96-c",
+  "lastSignedInAt": "1732121382902",
+  "createdAt": "1731028568134",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "111649941924075406155",
+      "email": "ljweaver@umich.edu",
+      "displayName": "Luke Weaver",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocJj5dQtLAzPFju_hNoLEtqAYK8lnsCaeaJJr-oWYH-ZzDRpywc=s96-c"
+    }
+  ]
+},
+{
+  "localId": "fLiN9dAtmORLjCQm1m0g10QxQQg1",
+  "email": "anuhea@umich.edu",
+  "emailVerified": true,
+  "displayName": "Anuhea Tao",
+  "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKi1EarhRTvWGu-cNOPD2g7ocWJeYjZ01d4V7CpulzkVwJ-og=s96-c",
+  "lastSignedInAt": "1732076854070",
+  "createdAt": "1731196965166",
+  "providerUserInfo": [
+    {
+      "providerId": "google.com",
+      "rawId": "110765456093715248556",
+      "email": "anuhea@umich.edu",
+      "displayName": "Anuhea Tao",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKi1EarhRTvWGu-cNOPD2g7ocWJeYjZ01d4V7CpulzkVwJ-og=s96-c"
+    }
+  ]
+}]}

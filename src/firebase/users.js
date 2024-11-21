@@ -5,31 +5,44 @@ export const getUniqname = (user) => {
 	return user.email.split("@")[0];
 };
 
-export const getUserData = async (user) => {
-	const docRef = doc(db, "users", getUniqname(user));
+export const getUserData = async (uniqname) => {
+	const docRef = doc(db, "users", uniqname);
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {
-        //console.log(`Retrieving ${getUniqname(user)} from database`)
 		return docSnap.data();
-	} else {
-        //console.log(`Creating ${getUniqname(user)}`)
-		return createUser(user);
-	}
+	} 
+
+    return undefined
 };
 
-export const createUser = async (user) => {
+export const createUserWithAuth = async (user) => {
     const userRef = doc(db, 'users', getUniqname(user));
-    const name = user.displayName;
+    const uniqname = getUniqname(user);
     const role = 'user';
     const trainings = []
 
     const newUser = {
-        name,
+        uniqname,
         role,
         trainings
     }
 
     await setDoc(userRef, newUser);
     return newUser
+}
+
+export const createUserNoAuth = async (uniqname) => {
+    const userRef = doc(db, 'users', uniqname);
+    const role = 'user';
+    const trainings = [];
+
+    const newUser = {
+        uniqname,
+        role,
+        trainings
+    }
+
+    await setDoc(userRef, newUser);
+    return newUser;
 }
