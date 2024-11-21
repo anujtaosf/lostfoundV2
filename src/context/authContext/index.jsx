@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import React, { createContext } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUserData } from "../../firebase/users";
+import { getUniqname, getUserData } from "../../firebase/users";
 import { doSignOut } from "../../firebase/auth";
 
 const AuthContext = createContext();
@@ -23,25 +23,27 @@ export const AuthProvider = ({ children }) => {
 		return unsubscribe;
 	}, []);
 
-	const initializeUser = async (user) => {
-        if (user && user.email.split(/@|\./)[1] !== "umich") {
-            doSignOut();
-            return
-        }
-
-		if (user) {
-            const data = await getUserData(user);
-
-			setCurrentUser({ ...user });
-            setUserLoggedIn(true);
-            setUserRole(data.role)
-            setUserData(data)
-		} else {
+	const initializeUser = async (user) => { 
+        if (!user) {
             setCurrentUser(null);
             setUserLoggedIn(false);
             setUserRole(null);
             setUserData(null);
+            setLoading(false);
+            return;
         }
+
+        const data = await getUserData(getUniqname(user));
+
+        if (!data) {
+            doSignOut();
+            return
+        }
+
+        setCurrentUser({ ...user });
+        setUserLoggedIn(true);
+        setUserRole(data.role);
+        setUserData(data);
         setLoading(false);
 	};
 

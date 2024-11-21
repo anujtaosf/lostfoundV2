@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getUniqname } from "../firebase/users";
-import { useAuth } from "../context/authContext";
 import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
 import styled from "styled-components";
 import { createNotification } from "../firebase/notifications";
+import UniqnameForm from "./UniqnameForm";
 
 const CheckoutForm = () => {
 	const [tickets, setTickets] = useState([]);
@@ -11,35 +10,40 @@ const CheckoutForm = () => {
 	const [isBroken, setIsBroken] = useState(false);
 	const [brokenDescription, setBrokenDescription] = useState("");
 
-	const { currentUser } = useAuth();
+	const [uniqname, setUniqname] = useState("");
 
+	const [statusMessage, setStatusMessage] = useState("");
 	useEffect(() => {
 		const handleGetTickets = async () => {
-			const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
+			const tickets = await getOpenTicketsFromUser(uniqname);
 			setTickets(tickets);
 		};
 
 		handleGetTickets();
-	}, [currentUser]);
+	}, [uniqname]);
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
+
+		const ticket = tickets.filter(ticket => {
+			return ticket.id === selectedTicket
+		})[0]
 
 		closeTicket(selectedTicket);
 		if (isBroken) {
 			createNotification({
 				created_at: new Date(),
 				description: brokenDescription,
-				user: getUniqname(currentUser),
+				user: uniqname,
 				type: "broken",
 				ticket: selectedTicket,
 				open: true,
-			})
+			});
 		}
 
 		const handleGetTickets = async () => {
-			const tickets = await getOpenTicketsFromUser(getUniqname(currentUser));
+			const tickets = await getOpenTicketsFromUser(uniqname);
 			setTickets(tickets);
 		};
 
@@ -47,67 +51,95 @@ const CheckoutForm = () => {
 		setSelectedTicket("");
 		setIsBroken(false);
 		setBrokenDescription("");
+		setStatusMessage(`Successfully checked in ${ticket.tool}`);
 	};
 
-	
+	const handleSignOut = (e) => {
+		e.preventDefault();
+
+		setSelectedTicket("");
+		setIsBroken(false);
+		setBrokenDescription("");
+		setTickets([]);
+		setUniqname("");
+	}
 
 	return (
 		<Container>
-			<Checkin onSubmit={handleSubmit}>
-				<Formlabel>Tool Check-in Form</Formlabel>
-				<Description>
-					Thank you for returning the tool! Please choose the tool you are checking in
-					below
-				</Description>
-				<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
-				<Select
-					id="dropdown"
-					value={selectedTicket}
-					onChange={(e) => {
-						setSelectedTicket(e.target.value);
+			{!uniqname ? (
+				<UniqnameForm
+					setUniqname={setUniqname}
+					setTrainings={() => {
+						return;
 					}}
-				>
-					<option value="">-- Please choose an option --</option>
-					{tickets.map((ticket, index) => (
-						<option key={index} value={ticket.id}>
-							{ticket.tool}
-						</option>
-					))}
-				</Select>
-				<br />
+				/>
+			) : (
+				<Checkin onSubmit={handleSubmit}>
+					<Formlabel>Tool Check-in Form</Formlabel>
+					<Description>
+						Thank you for returning the tool! Please choose the tool you are checking in
+						below
+					</Description>
+					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
+					<Select
+						id="dropdown"
+						value={selectedTicket}
+						onChange={(e) => {
+							setSelectedTicket(e.target.value);
+						}}
+					>
+						<option value="">-- Please choose an option --</option>
+						{tickets.map((ticket, index) => (
+							<option key={index} value={ticket.id}>
+								{ticket.tool}
+							</option>
+						))}
+					</Select>
+					<br />
 
-				<Fieldlabel htmlFor="isBroken">
-					<input
-						type="checkbox"
-						id="isBroken"
-						checked={isBroken}
-						onChange={(e) => setIsBroken(e.target.checked)}
-					/>
-					Is the tool broken?
-				</Fieldlabel>
-				<br />
-
-				{isBroken ? (
-					<>
-						<Fieldlabel htmlFor="brokenDescription">Description:</Fieldlabel>
+					<Fieldlabel htmlFor="isBroken">
 						<input
-							type="text"
-							id="brokenDescription"
-							value={brokenDescription}
-							placeholder="Describe how the item broke"
-							onChange={(e) => setBrokenDescription(e.target.value)}
+							type="checkbox"
+							id="isBroken"
+							checked={isBroken}
+							onChange={(e) => setIsBroken(e.target.checked)}
 						/>
-					</>
-				) : (
-					<></>
-				)}
+						Is the tool broken?
+					</Fieldlabel>
+					<br />
 
-				<br />
+					{isBroken ? (
+						<>
+							<Fieldlabel htmlFor="brokenDescription">Description:</Fieldlabel>
+							<input
+								type="text"
+								id="brokenDescription"
+								value={brokenDescription}
+								placeholder="Describe how the item broke"
+								onChange={(e) => setBrokenDescription(e.target.value)}
+							/>
+						</>
+					) : (
+						<></>
+					)}
 
-				<SubmitButton type="submit" disabled={!selectedTicket}>
-					Submit
-				</SubmitButton>
-			</Checkin>
+					<br />
+
+					<SubmitButton type="submit" disabled={!selectedTicket}>
+						Submit
+					</SubmitButton>
+
+					{statusMessage ? (
+						<>
+							<StatusMessage>{statusMessage}</StatusMessage>
+							<StatusMessage>Check-in another tool above or please sign out below</StatusMessage>
+							<SubmitButton onClick={handleSignOut}>Sign Out</SubmitButton>
+						</>
+					) : (
+						<></>
+					)}
+				</Checkin>
+			)}
 		</Container>
 	);
 };
@@ -139,7 +171,7 @@ const Checkin = styled.form`
 	@media (max-width: 991px) {
 		max-width: 70%;
 		padding: 12px;
-  	}
+	}
 `;
 
 const Formlabel = styled.label`
@@ -195,6 +227,10 @@ const SubmitButton = styled.button`
 	&:hover:not(:disabled) {
 		transform: scale(1.05);
 	}
+`;
+
+const StatusMessage = styled.div`
+	color: green;
 `;
 
 export default CheckoutForm;

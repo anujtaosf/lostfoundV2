@@ -6,7 +6,7 @@ import TicketsDashboard from "./components/TicketsDashboard";
 import Layout from "./components/Layout";
 import Landing from "./components/Landing";
 import CheckoutForm from "./components/CheckoutForm";
-import { AdminRoutes, UserRoutes } from "./components/Routes";
+import { AdminRoutes } from "./components/Routes";
 import { AuthProvider } from "./context/authContext";
 import CheckinForm from "./components/CheckinForm";
 
@@ -21,10 +21,8 @@ function App() {
 						<Route path="/dashboard" element={<TicketsDashboard />} />
 					</Route>
 
-					<Route element={<UserRoutes />}>
-						<Route path="/checkout" element={<CheckoutForm />} />
-						<Route path="/checkin" element={<CheckinForm />} />
-					</Route>
+					<Route path="/checkout" element={<CheckoutForm />} />
+					<Route path="/checkin" element={<CheckinForm />} />
 				</Route>
 			</Routes>
 		</AuthProvider>

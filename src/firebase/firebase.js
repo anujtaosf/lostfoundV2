@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-console.log(process.env.REACT_APP_ENV)
+//console.log(process.env.REACT_APP_ENV)
 
 if (process.env.REACT_APP_ENV === "development") {
     connectFirestoreEmulator(db, "localhost", 8080)
