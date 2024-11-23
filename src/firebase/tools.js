@@ -1,7 +1,19 @@
 import { FirebaseError } from "firebase/app";
 import { db } from "./firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
+/**
+ * @typedef tool
+ * @property {String} name name of tool
+ * @property {Number} amount amount in tool shop
+ * @property {Number} rating tool rating
+ * @property {String} training required training to checkout tool
+ *
+ */
+
+/**
+ * @returns {Tool[]} list of all tools in databasde
+ */
 export const getAllTools = async () => {
     try {
         const querySnapshot = await getDocs(collection(db, "tools"));
@@ -21,6 +33,10 @@ export const getAllTools = async () => {
     } 
 }
 
+/**
+ * @param {String} name 
+ * @returns {Tool} gets tool information by name
+ */
 export const getTool = async (name) => {
     try {
         const q = query(collection(db, "tools"), where("name", "==", name))
@@ -33,4 +49,8 @@ export const getTool = async (name) => {
             return []
         }
     }
+}
+
+export const createTool = async (tool) => {
+    await addDoc(collection(db, "tools"), tool);
 }

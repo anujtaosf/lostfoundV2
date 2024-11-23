@@ -1,6 +1,21 @@
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc, Timestamp, doc, updateDoc } from "firebase/firestore";
 
+/**
+ * @typedef {Object} Ticket
+ * @property {String} id
+ * @property {Date} created_at
+ * @property {String} location physical location where ticket is opened
+ * @property {String} tool tool that is checked out
+ * @property {String} user uniqname of person
+ * @property {Number} tool_rating safety rating of tool, 1-3
+ * @property {Boolean} open
+ */
+
+/**
+ * @description gets all tickets where open==true
+ * @returns {Ticket[]} 
+ */
 export const getOpenTickets = async () => {
     const q = query(collection(db, "tickets"), where("open", "==", true))
     const querySnapshot = await getDocs(q);
@@ -13,6 +28,11 @@ export const getOpenTickets = async () => {
     return tickets
 }
 
+/**
+ * @description get all open tickets created by user
+ * @param {String} users uniqname of user
+ * @returns {Ticket[]}
+ */
 export const getOpenTicketsFromUser = async (user) => {
     const q = query(collection(db, "tickets"), where("open", "==", true), where("user", "==", user));
     const querySnapshot = await getDocs(q);
@@ -25,12 +45,20 @@ export const getOpenTicketsFromUser = async (user) => {
     return tickets
 }
 
+/**
+ * @description upload ticket to database
+ * @param {Ticket} ticket 
+ */
 export const createTicket = async (ticket) => {
     ticket.created_at = Timestamp.fromDate(ticket.created_at)
 
     await addDoc(collection(db, "tickets"), ticket);
 }
 
+/**
+ * @description set open value of ticket to false
+ * @param {String} ticket_id 
+ */
 export const closeTicket = async (ticket_id) => {
     const ticketRef = doc(db, "tickets", ticket_id);
     await updateDoc(ticketRef, {open: false})
