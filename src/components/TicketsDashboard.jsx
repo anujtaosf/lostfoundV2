@@ -41,7 +41,7 @@ const DashboardContainer = styled.main`
   align: center;
   min-height: 832px;
   align-items: center;
-  height: 100vh; 
+  height: 90vh; 
   width: 100vw;
   padding: 0;    /* padding: 44px 32px 0; */
 

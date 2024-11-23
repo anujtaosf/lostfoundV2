@@ -14,7 +14,7 @@ const Header = () => {
 			{
 				<NavbarContainer>
 					{userRole === "admin" ? <NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem> : <></>}
-
+					{userRole === "admin" ? <NavItem to="/admin" isActive={location.pathname === "/admin"} >Inventory</NavItem> : <></>}
 					<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Check-out</NavItem>
 					<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Check-in</NavItem>
 				</NavbarContainer>
@@ -30,12 +30,13 @@ const Header = () => {
 
 const HeaderContainer = styled.header`
 	display: flex;
-	width: 100%;
+	width: 100vw;
 	align-items: center;
 	gap: 40px 100px;
 	justify-content: space-between;
 	flex-direction: row;
 	background-color: #f0f0f0;
+	height: 10vh;
 
 	@media (max-width: 991px) {
 		max-width: 100%;

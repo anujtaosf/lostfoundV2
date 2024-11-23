@@ -1,6 +1,6 @@
 import { FirebaseError } from "firebase/app";
 import { db } from "./firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 /**
  * @typedef tool
@@ -49,4 +49,8 @@ export const getTool = async (name) => {
             return []
         }
     }
+}
+
+export const createTool = async (tool) => {
+    await addDoc(collection(db, "tools"), tool);
 }

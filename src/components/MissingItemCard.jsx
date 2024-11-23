@@ -83,6 +83,7 @@ const CardContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   padding: 10px;
+  gap: 5px;
 `;
 
 const ItemInfo = styled.div`

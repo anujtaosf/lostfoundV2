@@ -43,7 +43,7 @@ export const getOpenNotifications = async () => {
  */
 export const createNotification = async (notification) => {
 	notification.created_at = Timestamp.fromDate(notification.created_at);
-	const docRef = await addDoc(collection(db, "notifications"), notification);
+	await addDoc(collection(db, "notifications"), notification);
 };
 
 /**
