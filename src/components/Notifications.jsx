@@ -21,9 +21,11 @@ const Notifications = () => {
 				<Title>NOTIFICATIONS</Title>
 			</SectionHeader>
 			<ItemList>
-				{notifications.map((notif, index) => (
-					<NotificationCard key={index} notif={notif} handleGetNotifications={handleGetNotifications} />
-				))}
+				<ScrollContainer>
+					{notifications.map((notif, index) => (
+						<NotificationCard key={index} notif={notif} handleGetNotifications={handleGetNotifications} />
+					))}
+				</ScrollContainer>
 			</ItemList>
 		</NotificationsContainer>
 	);
@@ -34,8 +36,13 @@ const NotificationsContainer = styled.section`
 	min-width: 240px;
 	flex-direction: column;
 	justify-content: flex-start;
+	padding: 0px 20px 20px 20px;
 	width: 325px;
-	padding: 0px 0px 20px 20px;
+	height: 100%;
+
+	@media (max-width: 991px) {
+	max-width: 100%;
+	}
 `;
 
 const SectionHeader = styled.div`
@@ -43,12 +50,13 @@ const SectionHeader = styled.div`
 	background-color: rgba(255, 255, 255, 0.9);
 	display: flex;
 	width: 100%;
+	max-width: 369px;
 	align-items: center;
 	justify-content: space-between;
-	padding: 20px 25px;
+	padding: 20px;
 
 	@media (max-width: 991px) {
-		padding: 20px;
+	padding: 20px;
 	}
 `;
 
@@ -64,13 +72,29 @@ const ItemList = styled.div`
 	background-color: rgba(255, 255, 255, 0.4);
 	display: flex;
 	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+
+	@media (max-width: 991px) {
+		padding: 20px;
+	}
+`;
+
+const ScrollContainer = styled.div`
+	border-radius: 0 0 12px 12px;
+	display: flex;
+	width: 100%;
+	height: 60vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
 	padding: 20px 25px;
 	flex-direction: column;
 	gap: 20px;
 	align-items: center;
 
-	@media (max-width: 991px) {
-		padding: 20px;
+	&::-webkit-scrollbar {
+  		display: none;
 	}
 `;
 export default Notifications;

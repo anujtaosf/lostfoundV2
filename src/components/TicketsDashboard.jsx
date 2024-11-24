@@ -41,7 +41,7 @@ const DashboardContainer = styled.main`
   align: center;
   min-height: 832px;
   align-items: center;
-  height: 90vh; 
+  height: 100vh; 
   width: 100vw;
   padding: 0;    /* padding: 44px 32px 0; */
 
@@ -58,6 +58,7 @@ const MainContent = styled.div`
   margin-top: 65px;
   align-items: flex-start;
   gap: 30px;
+  height: 100vh;
   justify-content: space-between;
   flex-wrap: wrap;
 
