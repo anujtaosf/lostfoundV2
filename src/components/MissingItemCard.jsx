@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { formatTimestampToDuration } from '../lib/time';
+import ContactPopup from './ContactPopup';
 import { closeTicket} from "../firebase/ticket";
 import { createEmail} from "../firebase/mail";
 
@@ -23,6 +24,12 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
     refreshTickets();
   };
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
   const ContactClick = async (e) =>{
     e.preventDefault();
     const email_address = user + "@umich.edu";
@@ -43,7 +50,9 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
       status: 'pending'
 		};
     console.log("contact_clicked");
+    togglePopup();
     createEmail(email);
+
   };
 
   return (
@@ -61,6 +70,7 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
           <ButtonIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/3ef5d023992f3dcd56c5ca590a6975bbc4bbace83c6f2e5238a132929db165e0?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Contact icon" />
           CONTACT
         </ActionButton>
+        {isPopupOpen && <ContactPopup onClose={togglePopup} />}
       </ActionButtons>
       <ItemDetails>
         <DetailGroup>
