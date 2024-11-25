@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { createTool } from "../firebase/tools";
-
+import {Formlabel, Description, Fieldlabel, Input, Select, SubmitButton} from "../styles/form-styles"
 const trainings = ["none", "frb-basic2", "wilson-basic2"];
 
 const AddToolForm = () => {
@@ -50,7 +50,7 @@ const AddToolForm = () => {
 					}}
 				/>
 
-				<br />
+	
 				<Fieldlabel htmlFor="dropdown">Training:</Fieldlabel>
 				<Select
 					id="dropdown"
@@ -66,7 +66,7 @@ const AddToolForm = () => {
 						</option>
 					))}
 				</Select>
-				<br />
+			
 
 				<SubmitButton
 					type="submit"
@@ -103,73 +103,5 @@ const Form = styled.form`
 	gap: 4px;
 `;
 
-const Formlabel = styled.label`
-	font-size: 32px;
-	font-weight: bold;
-	margin: 10px 0px 0px 0px;
-`;
-
-const Description = styled.label`
-	font-size: 18px;
-	margin: 0px 10px 10px 0px;
-	border-style: hidden hidden dotted hidden;
-	border-width: 4px;
-	border-color: rgba(0, 0, 0, 0.3);
-	padding-bottom: 8px;
-`;
-
-const Fieldlabel = styled.label`
-	font-size: 24px;
-	font-weight: bold;
-	margin: 10px 10px;
-`;
-
-const Select = styled.select`
-	padding: 8px;
-	margin-bottom: 10px;
-	width: 100%;
-	max-width: 300px;
-	display: center;
-	border-radius: 6px;
-
-	&:focus {
-		outline: none;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-	}
-`;
-
-const Input = styled.input`
-	padding: 8px;
-	margin-bottom: 10px;
-	width: 100%;
-	max-width: 300px;
-	display: center;
-	border-radius: 6px;
-
-	&:focus {
-		outline: none;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-	}
-`;
-
-const SubmitButton = styled.button`
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	margin: 10px;
-	transition: all 0.2s ease;
-
-	&:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-	&:hover:not(:disabled) {
-		transform: scale(1.05);
-	}
-`;
 
 export default AddToolForm;

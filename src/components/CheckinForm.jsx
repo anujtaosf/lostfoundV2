@@ -3,6 +3,16 @@ import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
 import styled from "styled-components";
 import { createNotification } from "../firebase/notifications";
 import UniqnameForm from "./UniqnameForm";
+import {
+	Formlabel,
+	Description,
+	Fieldlabel,
+	Select,
+	StatusMessage,
+	SubmitButton,
+	SignOutButton,
+	Input,
+} from "../styles/form-styles";
 
 const CheckoutForm = () => {
 	const [tickets, setTickets] = useState([]);
@@ -26,9 +36,9 @@ const CheckoutForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
 
-		const ticket = tickets.filter(ticket => {
-			return ticket.id === selectedTicket
-		})[0]
+		const ticket = tickets.filter((ticket) => {
+			return ticket.id === selectedTicket;
+		})[0];
 
 		closeTicket(selectedTicket);
 		if (isBroken) {
@@ -62,7 +72,7 @@ const CheckoutForm = () => {
 		setBrokenDescription("");
 		setTickets([]);
 		setUniqname("");
-	}
+	};
 
 	return (
 		<Container>
@@ -95,23 +105,23 @@ const CheckoutForm = () => {
 							</option>
 						))}
 					</Select>
-					<br />
+				
 
 					<Fieldlabel htmlFor="isBroken">
-						<input
+						Is the tool broken:
+						<Input
 							type="checkbox"
 							id="isBroken"
 							checked={isBroken}
 							onChange={(e) => setIsBroken(e.target.checked)}
 						/>
-						Is the tool broken?
 					</Fieldlabel>
-					<br />
+				
 
 					{isBroken ? (
 						<>
 							<Fieldlabel htmlFor="brokenDescription">Description:</Fieldlabel>
-							<input
+							<Input
 								type="text"
 								id="brokenDescription"
 								value={brokenDescription}
@@ -123,13 +133,13 @@ const CheckoutForm = () => {
 						<></>
 					)}
 
-					<br />
-
+					
 					{statusMessage ? (
 						<>
 							<StatusMessage>{statusMessage}</StatusMessage>
-							<StatusMessage>Check-in another tool above or please sign out below</StatusMessage>
-							
+							<StatusMessage>
+								Check-in another tool above or please sign out below
+							</StatusMessage>
 						</>
 					) : (
 						<></>
@@ -139,7 +149,6 @@ const CheckoutForm = () => {
 						Submit
 					</SubmitButton>
 					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
-					
 				</Checkin>
 			)}
 		</Container>
@@ -174,85 +183,6 @@ const Checkin = styled.form`
 		max-width: 70%;
 		padding: 12px;
 	}
-`;
-
-const Formlabel = styled.label`
-	font-size: 32px;
-	font-weight: bold;
-	margin: 10px 0px 0px 0px;
-`;
-
-const Description = styled.label`
-	font-size: 18px;
-	margin: 0px 10px 10px 0px;
-	border-style: hidden hidden dotted hidden;
-	border-width: 4px;
-	border-color: rgba(0, 0, 0, 0.3);
-	padding-bottom: 8px;
-`;
-
-const Fieldlabel = styled.label`
-	font-size: 24px;
-	font-weight: bold;
-	margin: 10px 10px;
-`;
-
-const Select = styled.select`
-	padding: 8px;
-	margin-bottom: 10px;
-	width: 100%;
-	max-width: 300px;
-	display: center;
-	border-radius: 6px;
-
-	&:focus {
-		outline: none;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-	}
-`;
-
-const SubmitButton = styled.button`
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	margin: 10px;
-	transition: all 0.2s ease;
-
-	&:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-	&:hover:not(:disabled) {
-		transform: scale(1.05);
-	}
-`;
-
-const SignOutButton = styled.button`
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #FF0000;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	margin: 10px;
-	transition: all 0.2s ease;
-
-	&:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-	&:hover:not(:disabled) {
-		transform: scale(1.05);
-	}
-`;
-
-const StatusMessage = styled.div`
-	color: green;
 `;
 
 export default CheckoutForm;

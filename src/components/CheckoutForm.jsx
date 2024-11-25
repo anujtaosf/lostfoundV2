@@ -3,6 +3,7 @@ import { getAllTools, getTool } from "../firebase/tools";
 import { createTicket } from "../firebase/ticket";
 import styled from "styled-components";
 import UniqnameForm from "./UniqnameForm";
+import { Formlabel, Description, Fieldlabel, Select, StatusMessage, SubmitButton, SignOutButton } from "../styles/form-styles";
 
 const CheckoutForm = () => {
 	const [tools, setTools] = useState([]);
@@ -69,11 +70,6 @@ const CheckoutForm = () => {
 					<Description>
 						Please choose the tool you are checking out and your location below
 					</Description>
-					<span>Logged in as {uniqname}.</span>
-					<span> Your relevant trainings are:</span>
-					{trainings.map((training, idx) => {
-						return <span key={idx}>{training}</span>;
-					})}
 					<Fieldlabel htmlFor="dropdown">Location:</Fieldlabel>
 					<Select
 						id="dropdown"
@@ -86,7 +82,7 @@ const CheckoutForm = () => {
 						<option value="wilson">Wilson Center</option>
 						<option value="frb">FRB Makerspace</option>
 					</Select>
-					<br />
+					
 					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
 					<Select
 						id="dropdown"
@@ -102,7 +98,7 @@ const CheckoutForm = () => {
 							</option>
 						))}
 					</Select>
-					<br />
+					
 					{statusMessage ? (
 						<>
 							<StatusMessage>{statusMessage}</StatusMessage>
@@ -154,83 +150,5 @@ const Checkout = styled.form`
 	}
 `;
 
-const Formlabel = styled.label`
-	font-size: 32px;
-	font-weight: bold;
-	margin: 10px 0px 0px 0px;
-`;
-
-const Description = styled.label`
-	font-size: 18px;
-	margin: 0px 10px 10px 0px;
-	border-style: hidden hidden dotted hidden;
-	border-width: 4px;
-	border-color: rgba(0, 0, 0, 0.3);
-	padding-bottom: 8px;
-`;
-
-const Fieldlabel = styled.label`
-	font-size: 24px;
-	font-weight: bold;
-	margin: 10px 10px;
-`;
-
-const Select = styled.select`
-	padding: 8px;
-	margin-bottom: 10px;
-	width: 100%;
-	max-width: 300px;
-	display: center;
-	border-radius: 6px;
-
-	&:focus {
-		outline: none;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-	}
-`;
-
-const SubmitButton = styled.button`
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #4caf50;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	margin: 10px;
-	transition: all 0.2s ease;
-
-	&:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-	&:hover:not(:disabled) {
-		transform: scale(1.05);
-	}
-`;
-
-const SignOutButton = styled.button`
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #FF0000;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	margin: 10px;
-	transition: all 0.2s ease;
-
-	&:disabled {
-		background-color: #ccc;
-		cursor: not-allowed;
-	}
-	&:hover:not(:disabled) {
-		transform: scale(1.05);
-	}
-`;
-
-const StatusMessage = styled.div`
-	color: green;
-`;
 
 export default CheckoutForm;
