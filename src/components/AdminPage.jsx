@@ -57,7 +57,6 @@ const MainContent = styled.div`
 	gap: 20px;
 
 	align-items: flex-start;
-	gap: 70px;
 	justify-content: space-between;
 	flex-wrap: wrap;
 
