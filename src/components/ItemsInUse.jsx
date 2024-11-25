@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { getOpenTickets } from "../firebase/ticket";
 import ItemInUseCard from "./ItemInUseCard";
 import { isTimestampToday } from "../lib/time";
-
+import { ColumnContainer, SectionHeader, SectionTitle, ItemList, ScrollContainer} from "../styles/dashboard-column-styles"
 /*
 const itemsInUseData = [
   { name: 'Scissors', time: '5:06 pm', user: 'Anu Tao', icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/15f671324f37bfc292a1b3f7d57741fd37e5bc3a6166b230097c9d54ac3e673b?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208' },
@@ -26,9 +26,9 @@ const ItemsInUse = () => {
 	};
 
 	return (
-		<ItemsInUseContainer>
+		<ColumnContainer>
 			<SectionHeader>
-				<Title>ITEMS IN USE</Title>
+				<SectionTitle>ITEMS IN USE</SectionTitle>
 			</SectionHeader>
 			<ItemList>
 				<ScrollContainer>
@@ -37,73 +37,8 @@ const ItemsInUse = () => {
 					))}
 				</ScrollContainer>
 			</ItemList>
-		</ItemsInUseContainer>
+		</ColumnContainer>
 	);
 };
-
-const ItemsInUseContainer = styled.section`
-	display: flex;
-	min-width: 240px;
-	flex-direction: column;
-	justify-content: flex-start;
-	padding: 0px 20px 20px 20px;
-	width: 325px;
-	height: 100%;
-
-	@media (max-width: 991px) {
-		max-width: 100%;
-	}
-`;
-
-const SectionHeader = styled.div`
-	border-radius: 12px 12px 0 0;
-	background-color: rgba(255, 255, 255, 0.9);
-	display: flex;
-	width: 100%;
-	align-items: center;
-	justify-content: space-between;
-	padding: 20px;
-
-	@media (max-width: 991px) {
-	}
-`;
-
-const Title = styled.h2`
-	color: #000;
-	text-align: center;
-	font: 700 22px Inter, sans-serif;
-	margin: 0;
-`;
-
-const ItemList = styled.div`
-	border-radius: 0 0 12px 12px;
-	background-color: rgba(255, 255, 255, 0.4);
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-
-	@media (max-width: 991px) {
-		padding: 20px;
-	}
-`;
-
-const ScrollContainer = styled.div`
-	border-radius: 0 0 12px 12px;
-	display: flex;
-	width: 100%;
-	height: 60vh;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	padding: 20px 25px;
-	flex-direction: column;
-	gap: 20px;
-	align-items: center;
-
-	&::-webkit-scrollbar {
-  		display: none;
-	}
-`;
 
 export default ItemsInUse;

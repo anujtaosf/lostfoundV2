@@ -49,7 +49,6 @@ const AddToolForm = () => {
 						setAmountInput(e.target.value);
 					}}
 				/>
-
 	
 				<Fieldlabel htmlFor="dropdown">Training:</Fieldlabel>
 				<Select
@@ -66,7 +65,6 @@ const AddToolForm = () => {
 						</option>
 					))}
 				</Select>
-			
 
 				<SubmitButton
 					type="submit"

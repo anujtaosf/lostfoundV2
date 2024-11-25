@@ -12,6 +12,7 @@ import {
 	SubmitButton,
 	SignOutButton,
 	Input,
+	CheckboxInput,
 } from "../styles/form-styles";
 
 const CheckoutForm = () => {
@@ -109,14 +110,13 @@ const CheckoutForm = () => {
 
 					<Fieldlabel htmlFor="isBroken">
 						Is the tool broken:
-						<Input
-							type="checkbox"
+						<CheckboxInput
 							id="isBroken"
 							checked={isBroken}
 							onChange={(e) => setIsBroken(e.target.checked)}
 						/>
 					</Fieldlabel>
-				
+					<br/>
 
 					{isBroken ? (
 						<>

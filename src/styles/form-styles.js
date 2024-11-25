@@ -57,7 +57,7 @@ export const SubmitButton = styled.button`
 export const SignOutButton = styled.button`
 	padding: 10px 20px;
 	font-size: 14px;
-	background-color: #FF0000;
+	background-color: #ff0000;
 	color: white;
 	border: none;
 	border-radius: 8px;
@@ -79,15 +79,26 @@ export const StatusMessage = styled.div`
 `;
 
 export const Input = styled.input`
-padding: 8px;
-margin: 10px;
-margin-bottom: 25px;
-display: center;
-border-radius: 6px;
+	padding: 8px;
+	margin: 10px;
+	margin-bottom: 25px;
+	display: center;
+	border-radius: 6px;
 
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+	}
+`;
 
-&:focus {
-    outline: none;
-    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
-}
+export const CheckboxInput = styled.input.attrs({type: "checkbox"})`
+	padding: 8px;
+	margin: 10px;
+	display: center;
+	border-radius: 6px;
+
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+	}
 `;
