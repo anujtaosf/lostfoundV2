@@ -45,7 +45,7 @@ export const DashboardHeader = styled.div`
   display: flex;
   margin-top: 20px;
   width: 95%;
-  flex-direction: column;
+  flex-direction: row;
   color: #000;
   justify-content: center;
   font: 700 22px Inter, sans-serif;

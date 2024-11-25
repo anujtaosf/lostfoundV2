@@ -3,18 +3,20 @@ import MissingItemCard from './MissingItemCard';
 import { isTimestampToday } from '../lib/time';
 import { getOpenTickets } from '../firebase/ticket';
 import { ColumnContainer, SectionHeader, SectionTitle, ItemList, ScrollContainer } from '../styles/dashboard-column-styles';
+import { useDashboard } from '../context/dashboardContext';
 
 const MissingItems = () => {
   const [tickets, setTickets] = useState([])
+  const { currentLocation } = useDashboard();
 
   useEffect(() => {
     refreshTickets();
-  }, [])
+  }, [currentLocation])
 
   const refreshTickets = async () => {
     const tx = await getOpenTickets();
     const todayTickets = tx.filter((ticket) => {
-      return !isTimestampToday(ticket.created_at)
+      return !isTimestampToday(ticket.created_at) && (ticket.location === currentLocation)
     })
     setTickets(todayTickets);
   }
