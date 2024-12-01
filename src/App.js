@@ -10,7 +10,6 @@ import Landing from "./components/Landing";
 import CheckoutForm from "./components/CheckoutForm";
 import CheckinForm from "./components/CheckinForm";
 import AdminPage from "./components/AdminPage";
-import { DashboardProvider } from "./context/dashboardContext";
 
 function App() {
 	return (

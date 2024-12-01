@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import NotificationCard from "./NotificationCard";
 import { getOpenNotifications } from "../firebase/notifications";
 import { ColumnContainer, SectionTitle, SectionHeader, ItemList, ScrollContainer } from "../styles/dashboard-column-styles";

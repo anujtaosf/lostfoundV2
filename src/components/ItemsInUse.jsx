@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { getOpenTickets } from "../firebase/ticket";
 import ItemInUseCard from "./ItemInUseCard";
 import { isTimestampToday } from "../lib/time";
@@ -17,16 +16,18 @@ const ItemsInUse = () => {
 	const { currentLocation } = useDashboard();
 
 	useEffect(() => {
+		const refreshTickets = async () => {
+			const tx = await getOpenTickets();
+			const todayTickets = tx.filter(
+				(ticket) => isTimestampToday(ticket.created_at) && ticket.location === currentLocation
+			);
+			setTickets(todayTickets);
+		};
+		
 		refreshTickets();
 	}, [currentLocation]);
 
-	const refreshTickets = async () => {
-		const tx = await getOpenTickets();
-		const todayTickets = tx.filter(
-			(ticket) => isTimestampToday(ticket.created_at) && ticket.location === currentLocation
-		);
-		setTickets(todayTickets);
-	};
+
 
 	return (
 		<ColumnContainer>

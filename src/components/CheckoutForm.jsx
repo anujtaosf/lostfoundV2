@@ -49,6 +49,7 @@ const CheckoutForm = () => {
 		setSelectedTool("");
 		setSelectedLocation("");
 		setStatusMessage(`Successfully signed out ${tool} from the ${location}`);
+		console.log(trainings);
 	};
 
 	const handleSignOut = (e) => {

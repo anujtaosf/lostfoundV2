@@ -10,6 +10,14 @@ const MissingItems = () => {
   const { currentLocation } = useDashboard();
 
   useEffect(() => {
+    const refreshTickets = async () => {
+      const tx = await getOpenTickets();
+      const todayTickets = tx.filter((ticket) => {
+        return !isTimestampToday(ticket.created_at) && (ticket.location === currentLocation)
+      })
+      setTickets(todayTickets);
+    }
+
     refreshTickets();
   }, [currentLocation])
 
@@ -20,6 +28,7 @@ const MissingItems = () => {
     })
     setTickets(todayTickets);
   }
+  
 
   return (
     <ColumnContainer>
