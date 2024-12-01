@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { doSignInWithGoogle, doSignOut } from "../firebase/auth";
 import { useAuth } from "../context/authContext";
-
+import styled from "styled-components";
 export const SignIn = () => {
 	const { userLoggedIn } = useAuth();
 
@@ -10,7 +10,7 @@ export const SignIn = () => {
 		doSignInWithGoogle();
 	};
 
-	return !userLoggedIn && <button onClick={signInWithGoogle}>Admin Sign In</button>;
+	return !userLoggedIn && <Button onClick={signInWithGoogle}>Admin Sign In</Button>;
 };
 
 export const SignOut = () => {
@@ -19,7 +19,7 @@ export const SignOut = () => {
 
 	return (
 		userLoggedIn && (
-			<button
+			<Button
 				onClick={() => {
 					doSignOut().then(() => {
 						navigate("/");
@@ -27,7 +27,26 @@ export const SignOut = () => {
 				}}
 			>
 				Sign Out
-			</button>
+			</Button>
 		)
 	);
 };
+
+const Button = styled.button`
+	padding: 10px 20px;
+	font-size: 14px;
+	border: 1px solid black;
+	color: black;
+	border-radius: 8px;
+	cursor: pointer;
+	margin: 10px;
+	transition: all 0.2s ease;
+
+	&:disabled {
+		background-color: #ccc;
+		cursor: not-allowed;
+	}
+	&:hover:not(:disabled) {
+		transform: scale(1.05);
+	}
+`;

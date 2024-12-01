@@ -11,7 +11,6 @@ import CheckoutForm from "./components/CheckoutForm";
 import CheckinForm from "./components/CheckinForm";
 import AdminPage from "./components/AdminPage";
 
-
 function App() {
 	return (
 		<AuthProvider>
@@ -26,7 +25,6 @@ function App() {
 
 					<Route path="/checkout" element={<CheckoutForm />} />
 					<Route path="/checkin" element={<CheckinForm />} />
-					
 				</Route>
 			</Routes>
 		</AuthProvider>
