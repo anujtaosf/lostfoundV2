@@ -1,36 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { createTool } from "../firebase/tools";
+import { createUserNoAuth } from "../firebase/users";
 import {Formlabel, Description, Fieldlabel, Input, Select, SubmitButton} from "../styles/form-styles"
 const trainings = ["none", "frb-basic2", "wilson-basic2"];
 
-const AddToolForm = () => {
+const AddUserForm = () => {
 	const [nameInput, setNameInput] = useState("");
-	const [amountInput, setAmountInput] = useState(0);
+	const [roleInput, setRoleInput] = useState("");
 	const [selectedTraining, setSelectedTraining] = useState("");
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
 
-		const tool = {
-			name: nameInput,
-			amount: amountInput,
-			training: selectedTraining,
-		};
-
 		setNameInput("");
-		setAmountInput("");
+		setRoleInput("");
 		setSelectedTraining("");
-		await createTool(tool);
+		await createUserNoAuth(nameInput, roleInput, selectedTraining);
 	};
 
 	return (
 		<Container>
 			<Form onSubmit={handleSubmit}>
-				<Formlabel>Add a Tool</Formlabel>
+				<Formlabel>Add a User</Formlabel>
 				<Description></Description>
-				<Fieldlabel htmlFor="name">Tool Name:</Fieldlabel>
+				<Fieldlabel htmlFor="name">Uniqname:</Fieldlabel>
 				<Input
 					type="text"
 					id="name"
@@ -40,15 +34,18 @@ const AddToolForm = () => {
 					}}
 				/>
 
-				<Fieldlabel htmlFor="amount">Amount:</Fieldlabel>
-				<Input
-					type="number"
+				<Fieldlabel htmlFor="role">Role:</Fieldlabel>
+				<Select
 					id="dropdown"
-					value={amountInput}
+					value={roleInput}
 					onChange={(e) => {
-						setAmountInput(e.target.value);
+						setRoleInput(e.target.value);
 					}}
-				/>
+                >
+                    <option value="">-- Please choose an option --</option>
+                    <option value="user">user</option>
+                    <option value="admin">admin</option>
+				</Select>
 	
 				<Fieldlabel htmlFor="dropdown">Training:</Fieldlabel>
 				<Select
@@ -68,7 +65,7 @@ const AddToolForm = () => {
 
 				<SubmitButton
 					type="submit"
-					disabled={!nameInput | !amountInput | !selectedTraining}
+					disabled={!nameInput | !roleInput | !selectedTraining}
 				>
 					Submit
 				</SubmitButton>
@@ -102,4 +99,4 @@ const Form = styled.form`
 `;
 
 
-export default AddToolForm;
+export default AddUserForm;

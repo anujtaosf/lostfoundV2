@@ -1,9 +1,21 @@
 import AdminTools from "./AdminTools";
 import { useState } from "react";
 import AddToolForm from "./AddToolForm";
+import AdminUsers from "./AdminUsers";
+import AddUserForm from "./AddUserForm";
 import { DashboardContainer, MainContent, Column, DashboardHeader, DashboardTitle } from "../styles/dashboard-styles";
 const AdminPage = () => {
 	const [formState, setFormState] = useState("");
+
+	const handleFormStateChange = (state) => {
+		let newState = state;
+
+		if (formState === state) {
+			newState = "";
+		}
+		
+		setFormState(newState);
+	}
 
 	return (
 		<>
@@ -13,8 +25,18 @@ const AdminPage = () => {
 				</DashboardHeader>
 				<MainContent>
 					<Column>
-						<AdminTools setFormState={setFormState} />
+						<AdminTools handleFormStateChange={handleFormStateChange} />
 					</Column>
+					<Column>
+						<AdminUsers handleFormStateChange={handleFormStateChange} />
+					</Column>
+					{formState === "user" ? (
+						<Column>
+							<AddUserForm />
+						</Column>
+					) : (
+						<></>
+					)}
 					{formState === "tool" ? (
 						<Column>
 							<AddToolForm />

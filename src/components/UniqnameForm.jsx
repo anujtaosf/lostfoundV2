@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getUserData } from "../firebase/users";
+import { createUserNoAuth, getUserData } from "../firebase/users";
 import styled from "styled-components";
 import { Description, Fieldlabel, Input, SubmitButton } from "../styles/form-styles";
 const UniqnameForm = ({setUniqname, setTrainings}) => {
@@ -9,17 +9,22 @@ const UniqnameForm = ({setUniqname, setTrainings}) => {
     const handleUniqnameSubmit = async (e) => {
 		e.preventDefault();
 
-		const data = await getUserData(uniqnameInput);
+		const uniqnameLowerCase = uniqnameInput.toLowerCase();
+		const data = await getUserData(uniqnameLowerCase);
 		if (!data) {
+			createUserNoAuth(uniqnameLowerCase, "user", ["none"]);
+			setTrainings(["none"])
+			/*
 			setErrorMessage(
 				"Error: You have no trainings for this location, please talk to staff if this is a mistake"
 			);
+			*/
 		} else {
-			setUniqname(uniqnameInput);    
 			setTrainings(data.trainings);
-            setErrorMessage("");
 		}
-
+		
+		setUniqname(uniqnameLowerCase);    
+        setErrorMessage("");
 		setUniqnameInput("");
 	};
 
