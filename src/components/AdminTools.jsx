@@ -4,7 +4,7 @@ import { getAllTools } from "../firebase/tools";
 import AdminToolCard from "./AdminToolCard";
 import { getInventory } from "../lib/inventory";
 import {ColumnContainer, SectionHeader, SectionTitle, ItemList, ScrollContainer} from "../styles/dashboard-column-styles"
-const AdminTools = ({setFormState}) => {
+const AdminTools = ({handleFormStateChange}) => {
 	const [tools, setTools] = useState([]);
     const [inventory, setInventory] = useState({});
 
@@ -23,11 +23,13 @@ const AdminTools = ({setFormState}) => {
         handleGetInventory();
 	}, []);
 
+	
+
 	return (
 		<ColumnContainer>
 			<SectionHeader>
 				<SectionTitle>TOOLS</SectionTitle>
-                <ActionButton onClick={() => {setFormState("tool")}}>Add Tool</ActionButton>
+                <ActionButton onClick={() => {handleFormStateChange("tool")}}>Add Tool</ActionButton>
 			</SectionHeader>
 			<ItemList>
 				<ScrollContainer>

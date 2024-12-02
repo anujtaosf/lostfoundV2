@@ -9,17 +9,20 @@ const UniqnameForm = ({setUniqname, setTrainings}) => {
     const handleUniqnameSubmit = async (e) => {
 		e.preventDefault();
 
-		const data = await getUserData(uniqnameInput);
+		const uniqnameLowerCase = uniqnameInput.toLowerCase();
+		const data = await getUserData(uniqnameLowerCase);
 		if (!data) {
 			setErrorMessage(
 				"Error: You have no trainings for this location, please talk to staff if this is a mistake"
 			);
 		} else {
-			setUniqname(uniqnameInput);    
+			setUniqname(uniqnameLowerCase);    
 			setTrainings(data.trainings);
             setErrorMessage("");
 		}
-
+		// setUniqname(uniqnameLowerCase);    
+		// setTrainings(data.trainings);
+        // setErrorMessage("");
 		setUniqnameInput("");
 	};
 

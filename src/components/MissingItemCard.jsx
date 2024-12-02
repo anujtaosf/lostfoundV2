@@ -19,8 +19,8 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
   const location = ticket.location
 
   const DismissClick = async (e) =>{
-    e.preventDefault(); // Prevent page reload
-    closeTicket(ticket.id); // TODO:  Need to figure out how to get id
+    e.preventDefault(); 
+    closeTicket(ticket.id); 
     refreshTickets();
   };
 
@@ -33,11 +33,14 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
   const ContactClick = async (e) =>{
     e.preventDefault();
     const email_address = user + "@umich.edu";
-    const reminder_message = "Hello, this is a reminder to please return " + name + " to " + location;
-    const subject = "Important Message from WSPTC Staff"
+    const luke_email = "ljweaver@umich.edu";
+    const anu_email = "anuhea@umich.edu";
+    const reminder_message = "Hello, this is a reminder to please return " + name + " to the " + location;
+    const subject = "Important Message from WSPTC Staff";
 
     const email = {
 			to: [email_address],
+      cc: [anu_email, luke_email],
       message: {
         subject: subject,
         text: reminder_message,

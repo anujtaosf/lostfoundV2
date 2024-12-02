@@ -5,7 +5,7 @@ export const ColumnContainer = styled.section`
 	min-width: 240px;
 	flex-direction: column;
 	justify-content: flex-start;
-	padding: 0px 20px 20px 20px;
+	padding: 0px 0px 0px 20px;
 	width: 325px;
 	height: 100%;
 

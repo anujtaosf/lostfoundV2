@@ -20,7 +20,7 @@ const CheckoutForm = () => {
 
 	const handleToolUpdate = async () => {
 		const tempTools = await getAllTools();
-		setTools(tempTools.map((tool) => tool.name));
+		setTools(tempTools.map((tool) => tool.name).sort());
 	};
 
 	// Handle form submission

@@ -22,10 +22,9 @@ export const DashboardContainer = styled.main`
 export const MainContent = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 50px;
   margin-top: 30px;
   align-items: flex-start;
-  gap: 30px;
   height: 100vh;
   justify-content: space-between;
   flex-wrap: wrap;

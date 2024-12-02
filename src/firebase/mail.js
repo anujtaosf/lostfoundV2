@@ -1,5 +1,7 @@
 import { db } from "./firebase";
 import { collection, addDoc} from "firebase/firestore";
+// const {onSchedule} = require("firebase-functions/v2/scheduler");
+// const {logger} = require("firebase-functions");
 
 /**
  * @typedef {Object} Email 
@@ -16,3 +18,10 @@ import { collection, addDoc} from "firebase/firestore";
 export const createEmail = async (email) => {
     return await addDoc(collection(db, "mail"), email);
 }
+
+// exports.scheduledEmailReminder = onSchedule({
+//     schedule: "0 8 * * *",  // 8am daily (i think?)
+//     timeZone: "America/Detroit", 
+//   }, async (event) => {
+
+//   });
