@@ -87,7 +87,7 @@ const CheckoutForm = () => {
 			user,
 			open,
 		};
-		
+
 		createTicket(ticket);
 		setSelectedTool("");
 		setSelectedLocation("");
@@ -121,6 +121,7 @@ const CheckoutForm = () => {
 						onChange={setSelectedLocation}
 						placeholder="Select a location..."
 						styles={ReactSelectStyles}
+						menuPlacement="top"
 					/>
 
 					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
@@ -130,6 +131,7 @@ const CheckoutForm = () => {
 						onChange={setSelectedTool}
 						placeholder="Select a tool..."
 						styles={ReactSelectStyles}
+						menuPlacement="top"
 					/>
 
 					{statusMessage ? (
