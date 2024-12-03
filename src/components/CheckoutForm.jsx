@@ -3,13 +3,55 @@ import { getAllTools, getTool } from "../firebase/tools";
 import { createTicket } from "../firebase/ticket";
 import styled from "styled-components";
 import UniqnameForm from "./UniqnameForm";
-import { Formlabel, Description, Fieldlabel, Select, StatusMessage, SubmitButton, SignOutButton } from "../styles/form-styles";
+import {
+	Formlabel,
+	Description,
+	Fieldlabel,
+	StatusMessage,
+	SubmitButton,
+	SignOutButton,
+	ReactSelectStyles,
+} from "../styles/form-styles";
+import Select from "react-select";
+
+const locationOptions = [
+	{ value: "frb", label: "FRB Makerspace" },
+	{ value: "wilson", label: "Wilson Center" },
+];
+
+const commonTools = ["Safety Glasses", "SD Card", "Card Reader"];
+
+const formatToolOptions = (tools) => {
+	const toolOptions = tools.map((tool) => {
+		return { value: tool, label: tool };
+	});
+
+	const commonToolOptions = toolOptions.filter((toolOption) => {
+		return commonTools.includes(toolOption.value)
+	})
+
+	const otherToolOptions = toolOptions.filter(toolOption => {
+		return !commonTools.includes(toolOption.value)
+	})
+
+
+	return [
+		{
+			label: "Common",
+			options: commonToolOptions
+		},
+		{
+			label: "Other",
+			options: otherToolOptions
+		}
+	];
+};
 
 const CheckoutForm = () => {
-	const [tools, setTools] = useState([]);
-	const [selectedTool, setSelectedTool] = useState("");
-	const [selectedLocation, setSelectedLocation] = useState("");
+	const [selectedTool, setSelectedTool] = useState({});
+	const [selectedLocation, setSelectedLocation] = useState({});
 
+	const [toolOptions, setToolOptions] = useState([]);
 	const [uniqname, setUniqname] = useState("");
 	const [trainings, setTrainings] = useState([]);
 	const [statusMessage, setStatusMessage] = useState("");
@@ -20,7 +62,8 @@ const CheckoutForm = () => {
 
 	const handleToolUpdate = async () => {
 		const tempTools = await getAllTools();
-		setTools(tempTools.map((tool) => tool.name).sort());
+		const tools = tempTools.map((tool) => tool.name).sort();
+		setToolOptions(formatToolOptions(tools));
 	};
 
 	// Handle form submission
@@ -29,8 +72,8 @@ const CheckoutForm = () => {
 
 		const created_at = new Date();
 		const user = uniqname;
-		const tool = selectedTool;
-		const location = selectedLocation;
+		const tool = selectedTool.value;
+		const location = selectedLocation.value;
 		const open = true;
 
 		const toolInfo = await getTool(tool);
@@ -44,7 +87,7 @@ const CheckoutForm = () => {
 			user,
 			open,
 		};
-
+		
 		createTicket(ticket);
 		setSelectedTool("");
 		setSelectedLocation("");
@@ -59,7 +102,7 @@ const CheckoutForm = () => {
 		setSelectedLocation("");
 		setStatusMessage("");
 		setUniqname("");
-	}
+	};
 
 	return (
 		<Container>
@@ -73,38 +116,28 @@ const CheckoutForm = () => {
 					</Description>
 					<Fieldlabel htmlFor="dropdown">Location:</Fieldlabel>
 					<Select
-						id="dropdown"
+						options={locationOptions}
 						value={selectedLocation}
-						onChange={(e) => {
-							setSelectedLocation(e.target.value);
-						}}
-					>
-						<option value="">-- Please choose an location --</option>
-						<option value="wilson">Wilson Center</option>
-						<option value="frb">FRB Makerspace</option>
-					</Select>
-					
+						onChange={setSelectedLocation}
+						placeholder="Select a location..."
+						styles={ReactSelectStyles}
+					/>
+
 					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
 					<Select
-						id="dropdown"
+						options={toolOptions}
 						value={selectedTool}
-						onChange={(e) => {
-							setSelectedTool(e.target.value);
-						}}
-					>
-						<option value="">-- Please choose an option --</option>
-						{tools.map((item, index) => (
-							<option key={index} value={item}>
-								{item}
-							</option>
-						))}
-					</Select>
-					
+						onChange={setSelectedTool}
+						placeholder="Select a tool..."
+						styles={ReactSelectStyles}
+					/>
+
 					{statusMessage ? (
 						<>
 							<StatusMessage>{statusMessage}</StatusMessage>
-							<StatusMessage>Check-out another tool above or please sign out below</StatusMessage>
-							
+							<StatusMessage>
+								Check-out another tool above or please sign out below
+							</StatusMessage>
 						</>
 					) : (
 						<></>
@@ -114,7 +147,6 @@ const CheckoutForm = () => {
 						Submit
 					</SubmitButton>
 					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
-					
 				</Checkout>
 			)}
 		</Container>
@@ -151,5 +183,34 @@ const Checkout = styled.form`
 	}
 `;
 
-
 export default CheckoutForm;
+
+/*
+					<Select
+						id="dropdown"
+						value={selectedLocation}
+						onChange={(e) => {
+							setSelectedLocation(e.target.value);
+						}}
+					>
+						<option value="">-- Please choose an location --</option>
+						<option value="wilson">Wilson Center</option>
+						<option value="frb">FRB Makerspace</option>
+					</Select>
+					
+ */
+
+/* <Select
+	id="dropdown"
+	value={selectedTool}
+	onChange={(e) => {
+		setSelectedTool(e.target.value);
+	}}
+>
+	<option value="">-- Please choose an option --</option>
+	{tools.map((item, index) => (
+		<option key={index} value={item}>
+			{item}
+		</option>
+	))}
+</Select>; */
