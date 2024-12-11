@@ -32,7 +32,6 @@ const HeaderContainer = styled.header`
 	display: flex;
 	width: 100vw;
 	align-items: center;
-	gap: 40px 100px;
 	justify-content: space-between;
 	flex-direction: row;
 	background-color: #f0f0f0;

@@ -88,10 +88,11 @@ const CheckoutForm = () => {
 			open,
 		};
 
+		
 		createTicket(ticket);
+		setStatusMessage(`Successfully signed out ${tool} from the ${selectedLocation.label}`);
 		setSelectedTool("");
 		setSelectedLocation("");
-		setStatusMessage(`Successfully signed out ${tool} from the ${location}`);
 		console.log(trainings);
 	};
 
@@ -122,6 +123,7 @@ const CheckoutForm = () => {
 						placeholder="Select a location..."
 						styles={ReactSelectStyles}
 						menuPlacement="top"
+						isSearchable={false}
 					/>
 
 					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
@@ -145,7 +147,7 @@ const CheckoutForm = () => {
 						<></>
 					)}
 
-					<SubmitButton type="submit" disabled={!selectedTool || !selectedLocation}>
+					<SubmitButton type="submit" disabled={!selectedTool.value || !selectedLocation.value}>
 						Submit
 					</SubmitButton>
 					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
@@ -156,16 +158,10 @@ const CheckoutForm = () => {
 };
 
 const Container = styled.div`
-	width: 100%;
 	padding: 40px 20px;
 	display: flex;
 	justify-content: center;
-
-	@media (max-width: 991px) {
-		width: 100%;
-		padding: 40px 40px;
-		justify-content: center;
-	}
+	overflow: hidden;
 `;
 
 const Checkout = styled.form`

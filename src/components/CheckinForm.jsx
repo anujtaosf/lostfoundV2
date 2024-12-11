@@ -20,7 +20,6 @@ const formatTicketOptions = (tickets) => {
 	const ticketOptions = tickets.map((ticket) => {
 		return { value: ticket.id, label: ticket.tool };
 	});
-	console.log(ticketOptions)
 	return ticketOptions;
 };
 
@@ -33,23 +32,19 @@ const CheckoutForm = () => {
 	const [uniqname, setUniqname] = useState("");
 
 	const [statusMessage, setStatusMessage] = useState("");
+
 	useEffect(() => {
 		const handleGetTickets = async () => {
 			const tickets = await getOpenTicketsFromUser(uniqname);
-			console.log(tickets)
 			setTicketOptions(formatTicketOptions(tickets));
 		};
-
+		
 		handleGetTickets();
 	}, [uniqname]);
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
-
-		const ticket = ticketOptions.filter((ticketOption) => {
-			return ticketOption.value === selectedTicketOption.value;
-		})[0];
 
 		closeTicket(selectedTicketOption.value);
 		if (isBroken) {
@@ -65,14 +60,14 @@ const CheckoutForm = () => {
 
 		const handleGetTickets = async () => {
 			const tickets = await getOpenTicketsFromUser(uniqname);
-			setTicketOptions(tickets);
+			setTicketOptions(formatTicketOptions(tickets));
 		};
 
 		handleGetTickets();
 		setSelectedTicketOption({});
 		setIsBroken(false);
 		setBrokenDescription("");
-		setStatusMessage(`Successfully checked in ${ticket.tool}`);
+		setStatusMessage(`Successfully checked in ${selectedTicketOption.label}`);
 	};
 
 	const handleSignOut = (e) => {
@@ -109,6 +104,7 @@ const CheckoutForm = () => {
 						options={ticketOptions}
 					    styles={ReactSelectStyles}
 						placeholder="Select a ticket..."
+						isSearchable={false}
 					/>
 					<Fieldlabel htmlFor="isBroken">
 						Is the tool broken:
@@ -146,7 +142,7 @@ const CheckoutForm = () => {
 						<></>
 					)}
 
-					<SubmitButton type="submit" disabled={!selectedTicketOption}>
+					<SubmitButton type="submit" disabled={!selectedTicketOption.value}>
 						Submit
 					</SubmitButton>
 					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
@@ -157,16 +153,10 @@ const CheckoutForm = () => {
 };
 
 const Container = styled.div`
-	width: 100%;
 	padding: 40px 20px;
 	display: flex;
 	justify-content: center;
-
-	@media (max-width: 991px) {
-		width: 100%;
-		padding: 40px 40px;
-		justify-content: center;
-	}
+	overflow: hidden;
 `;
 
 const Checkin = styled.form`
