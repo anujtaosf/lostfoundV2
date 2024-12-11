@@ -46,10 +46,6 @@ const CheckoutForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
 
-		const ticket = ticketOptions.filter((ticketOption) => {
-			return ticketOption.value === selectedTicketOption.value;
-		})[0];
-
 		closeTicket(selectedTicketOption.value);
 		if (isBroken) {
 			createNotification({
