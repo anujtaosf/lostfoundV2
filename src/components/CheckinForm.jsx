@@ -7,29 +7,38 @@ import {
 	Formlabel,
 	Description,
 	Fieldlabel,
-	Select,
 	StatusMessage,
 	SubmitButton,
 	SignOutButton,
 	Input,
 	CheckboxInput,
+	ReactSelectStyles,
 } from "../styles/form-styles";
+import Select from "react-select";
+
+const formatTicketOptions = (tickets) => {
+	const ticketOptions = tickets.map((ticket) => {
+		return { value: ticket.id, label: ticket.tool };
+	});
+	return ticketOptions;
+};
 
 const CheckoutForm = () => {
-	const [tickets, setTickets] = useState([]);
-	const [selectedTicket, setSelectedTicket] = useState("");
+	const [ticketOptions, setTicketOptions] = useState([]);
+	const [selectedTicketOption, setSelectedTicketOption] = useState({});
 	const [isBroken, setIsBroken] = useState(false);
 	const [brokenDescription, setBrokenDescription] = useState("");
 
 	const [uniqname, setUniqname] = useState("");
 
 	const [statusMessage, setStatusMessage] = useState("");
+
 	useEffect(() => {
 		const handleGetTickets = async () => {
 			const tickets = await getOpenTicketsFromUser(uniqname);
-			setTickets(tickets);
+			setTicketOptions(formatTicketOptions(tickets));
 		};
-
+		
 		handleGetTickets();
 	}, [uniqname]);
 
@@ -37,41 +46,37 @@ const CheckoutForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent page reload
 
-		const ticket = tickets.filter((ticket) => {
-			return ticket.id === selectedTicket;
-		})[0];
-
-		closeTicket(selectedTicket);
+		closeTicket(selectedTicketOption.value);
 		if (isBroken) {
 			createNotification({
 				created_at: new Date(),
 				description: brokenDescription,
 				user: uniqname,
 				type: "broken",
-				ticket: selectedTicket,
+				ticket: selectedTicketOption.value,
 				open: true,
 			});
 		}
 
 		const handleGetTickets = async () => {
 			const tickets = await getOpenTicketsFromUser(uniqname);
-			setTickets(tickets);
+			setTicketOptions(formatTicketOptions(tickets));
 		};
 
 		handleGetTickets();
-		setSelectedTicket("");
+		setSelectedTicketOption({});
 		setIsBroken(false);
 		setBrokenDescription("");
-		setStatusMessage(`Successfully checked in ${ticket.tool}`);
+		setStatusMessage(`Successfully checked in ${selectedTicketOption.label}`);
 	};
 
 	const handleSignOut = (e) => {
 		e.preventDefault();
 
-		setSelectedTicket("");
+		setSelectedTicketOption({});
 		setIsBroken(false);
 		setBrokenDescription("");
-		setTickets([]);
+		setTicketOptions([]);
 		setUniqname("");
 	};
 
@@ -94,20 +99,13 @@ const CheckoutForm = () => {
 					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
 					<Select
 						id="dropdown"
-						value={selectedTicket}
-						onChange={(e) => {
-							setSelectedTicket(e.target.value);
-						}}
-					>
-						<option value="">-- Please choose an option --</option>
-						{tickets.map((ticket, index) => (
-							<option key={index} value={ticket.id}>
-								{ticket.tool}
-							</option>
-						))}
-					</Select>
-				
-
+						value={selectedTicketOption}
+						onChange={setSelectedTicketOption}
+						options={ticketOptions}
+					    styles={ReactSelectStyles}
+						placeholder="Select a ticket..."
+						isSearchable={false}
+					/>
 					<Fieldlabel htmlFor="isBroken">
 						Is the tool broken:
 						<CheckboxInput
@@ -116,7 +114,7 @@ const CheckoutForm = () => {
 							onChange={(e) => setIsBroken(e.target.checked)}
 						/>
 					</Fieldlabel>
-					<br/>
+					<br />
 
 					{isBroken ? (
 						<>
@@ -133,7 +131,6 @@ const CheckoutForm = () => {
 						<></>
 					)}
 
-					
 					{statusMessage ? (
 						<>
 							<StatusMessage>{statusMessage}</StatusMessage>
@@ -145,7 +142,7 @@ const CheckoutForm = () => {
 						<></>
 					)}
 
-					<SubmitButton type="submit" disabled={!selectedTicket}>
+					<SubmitButton type="submit" disabled={!selectedTicketOption.value}>
 						Submit
 					</SubmitButton>
 					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
@@ -156,16 +153,10 @@ const CheckoutForm = () => {
 };
 
 const Container = styled.div`
-	width: 100%;
 	padding: 40px 20px;
 	display: flex;
 	justify-content: center;
-
-	@media (max-width: 991px) {
-		width: 100%;
-		padding: 40px 40px;
-		justify-content: center;
-	}
+	overflow: hidden;
 `;
 
 const Checkin = styled.form`
