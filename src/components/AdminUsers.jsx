@@ -9,6 +9,7 @@ const AdminUsers = ({handleFormStateChange}) => {
 	useEffect(() => {
 		const handleGetUsers = async () => {
 			const usr = await getAllUsers();
+            console.log(usr);
 			setUsers(usr);
 		};
 
