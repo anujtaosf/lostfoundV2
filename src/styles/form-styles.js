@@ -34,27 +34,6 @@ export const Select = styled.select`
 	}
 `;
 
-export const ReactSelectStyles = {
-	control: (base, state) => ({
-		...base,
-		padding: "2px", // react-select wraps this differently
-		margin: "0px 10px 10px 10px",
-		borderRadius: "6px",
-		boxShadow: state.isFocused ? "0 0 2px 2px rgba(0, 0, 0, 0.1)" : "none",
-		borderColor: state.isFocused ? "#ccc" : base.borderColor,
-		"&:hover": {
-			borderColor: "#ccc",
-		},
-	}),
-	menu: (base) => ({
-		...base,
-		width: "96%",
-		marginLeft: "10px",
-		padding: "0px",
-		borderRadius: "6px",
-	})
-};
-
 export const SubmitButton = styled.button`
 	padding: 10px 20px;
 	font-size: 14px;
@@ -97,7 +76,6 @@ export const SignOutButton = styled.button`
 
 export const StatusMessage = styled.div`
 	color: green;
-	padding: 0px 10px
 `;
 
 export const Input = styled.input`
@@ -113,7 +91,7 @@ export const Input = styled.input`
 	}
 `;
 
-export const CheckboxInput = styled.input.attrs({ type: "checkbox" })`
+export const CheckboxInput = styled.input.attrs({type: "checkbox"})`
 	padding: 8px;
 	margin: 10px;
 	display: center;
