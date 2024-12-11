@@ -97,6 +97,7 @@ export const SignOutButton = styled.button`
 
 export const StatusMessage = styled.div`
 	color: green;
+	padding: 0px 10px
 `;
 
 export const Input = styled.input`
