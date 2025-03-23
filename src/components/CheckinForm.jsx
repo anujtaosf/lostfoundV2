@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
 import styled from "styled-components";
 import { createNotification } from "../firebase/notifications";
-import UniqnameForm from "./UniqnameForm";
+import UniqnameFormReturn from "./UniqnameFormReturn";
 import {
 	Formlabel,
 	Description,
@@ -78,7 +78,7 @@ const CheckoutForm = () => {
 	return (
 		<Container>
 			{!uniqname ? (
-				<UniqnameForm
+				<UniqnameFormReturn
 					setUniqname={setUniqname}
 					setTrainings={() => {
 						return;
