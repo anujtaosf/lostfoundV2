@@ -9,6 +9,7 @@ const AdminUsers = ({handleFormStateChange}) => {
 	useEffect(() => {
 		const handleGetUsers = async () => {
 			const usr = await getAllUsers();
+			usr.sort((a, b) => a.uniqname.localeCompare(b.uniqname));
             console.log(usr);
 			setUsers(usr);
 		};

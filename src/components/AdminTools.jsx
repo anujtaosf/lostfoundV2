@@ -11,6 +11,7 @@ const AdminTools = ({handleFormStateChange}) => {
 	useEffect(() => {
 		const handleGetTools = async () => {
 			const tls = await getAllTools();
+			tls.sort((a, b) => a.name.localeCompare(b.name));
 			setTools(tls);
 		};
 
