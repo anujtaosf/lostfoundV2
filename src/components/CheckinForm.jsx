@@ -86,7 +86,7 @@ const CheckoutForm = () => {
 				/>
 			) : (
 				<Checkin onSubmit={handleSubmit}>
-					<Formlabel>Tool Check-in Form</Formlabel>
+					<Formlabel>Tool Return Form</Formlabel>
 					<Description>
 						Thank you for returning the tool! Please choose the tool you are checking in
 						below

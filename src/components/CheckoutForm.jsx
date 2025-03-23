@@ -67,7 +67,7 @@ const CheckoutForm = () => {
 				<UniqnameForm setUniqname={setUniqname} setTrainings={setTrainings} />
 			) : (
 				<Checkout onSubmit={handleSubmit}>
-					<Formlabel>Tool Check-out Form</Formlabel>
+					<Formlabel>Tool Borrowing Form</Formlabel>
 					<Description>
 						Please choose the tool you are checking out and your location below
 					</Description>

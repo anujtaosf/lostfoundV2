@@ -15,8 +15,8 @@ const Header = () => {
 				<NavbarContainer>
 					{userRole === "admin" ? <NavItem to="/dashboard" isActive={location.pathname === "/dashboard"} >Dashboard</NavItem> : <></>}
 					{userRole === "admin" ? <NavItem to="/admin" isActive={location.pathname === "/admin"} >Inventory</NavItem> : <></>}
-					<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Check-out</NavItem>
-					<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Check-in</NavItem>
+					<NavItem to="/checkout" isActive={location.pathname === "/checkout"}>Borrow Tool</NavItem>
+					<NavItem to="/checkin" isActive={location.pathname === "/checkin"}>Return Tool</NavItem>
 				</NavbarContainer>
 			}
 			<UserInfo>
