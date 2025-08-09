@@ -1,64 +1,81 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import { formatTimestampToDuration } from '../lib/time';
-import ContactPopup from './ContactPopup';
-import { closeTicket} from "../firebase/ticket";
-import { createEmail} from "../firebase/mail";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { formatTimestampToDuration } from "../lib/time";
+import ContactPopup from "./ContactPopup";
+import DismissPopup from "./DismissPopup";              // ⬅️ add
+import { closeTicket } from "../firebase/ticket";
+import { createEmail } from "../firebase/mail";
+import { getInventory } from "../lib/inventory";
+import { getTool, setManualLeft, clearManualLeft } from "../firebase/tools";
 
 const icons = {
-  1: 'https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
-  2: 'https://cdn.builder.io/api/v1/image/assets/TEMP/869847049170febd1cbe668074b2ab2c025bb63aeb60e7b949205b9f0d9e0e52?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208',
-  3: 'https://cdn.builder.io/api/v1/image/assets/TEMP/75ed8eaf3767cf4017c612551ed700799f398e667cba11c1d94dfb8518504b09?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208'
-}
+  1: "https://cdn.builder.io/api/v1/image/assets/TEMP/5e1094353031181efb52d82028fde08ee899ccb0e1d1514432e522e0e4807562?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208",
+  2: "https://cdn.builder.io/api/v1/image/assets/TEMP/869847049170febd1cbe668074b2ab2c025bb63aeb60e7b949205b9f0d9e0e52?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208",
+  3: "https://cdn.builder.io/api/v1/image/assets/TEMP/75ed8eaf3767cf4017c612551ed700799f398e667cba11c1d94dfb8518504b09?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208",
+};
 
 const MissingItemCard = ({ ticket, refreshTickets }) => {
-  const icon = icons[ticket.tool_rating]
-  const name = ticket.tool
+  const icon = icons[ticket.tool_rating];
+  const name = ticket.tool;
   const time = formatTimestampToDuration(ticket.created_at);
-  const user = ticket.user
-  const location = ticket.location
+  const user = ticket.user;
+  const location = ticket.location;
 
-  const DismissClick = async (e) =>{
-    e.preventDefault(); 
-    closeTicket(ticket.id); 
-    refreshTickets();
-  };
-
+  // contact popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const togglePopup = () => setIsPopupOpen((s) => !s);
 
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
+  // dismiss popup
+  const [showDismiss, setShowDismiss] = useState(false);
+  const openDismiss = (e) => { e.preventDefault(); setShowDismiss(true); };
+  const closeDismiss = () => setShowDismiss(false);
+
+  const markMissing = async () => {
+    // freeze current left so closing the ticket won’t increase inventory
+    const inv = await getInventory();
+    const leftNow = inv[name] ?? 0;
+    const tool = await getTool(name);
+    if (tool?.id) await setManualLeft(tool.id, leftNow);
+
+    await closeTicket(ticket.id);
+    setShowDismiss(false);
+    await refreshTickets();
   };
 
-  const ContactClick = async (e) =>{
+  const markReturned = async () => {
+    const tool = await getTool(name);
+    if (tool?.id && typeof tool.manualLeft === "number") {
+      const next = tool.manualLeft + 1;
+      if (next >= Number(tool.amount || 0)) {
+        await clearManualLeft(tool.id); // back to automatic
+      } else {
+        await setManualLeft(tool.id, next);
+      }
+    }
+    await closeTicket(ticket.id);
+    setShowDismiss(false);
+    await refreshTickets();
+  };
+
+  const ContactClick = async (e) => {
     e.preventDefault();
-    const email_address = user + "@umich.edu";
-    const luke_email = "ljweaver@umich.edu";
-    const anu_email = "anuhea@umich.edu";
-    const alyssa_email = "aemigh@umich.edu";
-    const casey_email = "kcdixon@umich.edu";
-    const blake_email = "blakedes@umich.edu";
-    const reminder_message = "Hello, this is a reminder to please return " + name + " to the " + location;
-    const subject = "Important Message from WSPTC Staff";
-
-    const email = {
-			to: [email_address],
-      cc: [anu_email, luke_email, alyssa_email, blake_email, casey_email],
-      message: {
-        subject: subject,
-        text: reminder_message,
-        html: reminder_message
-      },
-
-      timestamp: new Date(),
-    
-      // Add status field for tracking email state
-      status: 'pending'
-		};
-    console.log("contact_clicked");
+    const email_address = `${user}@umich.edu`;
+    const cc = [
+      "anuhea@umich.edu",
+      "ljweaver@umich.edu",
+      "aemigh@umich.edu",
+      "blakedes@umich.edu",
+      "kcdixon@umich.edu",
+    ];
+    const message = `Hello, this is a reminder to please return ${name} to the ${location}`;
     togglePopup();
-    createEmail(email);
-
+    await createEmail({
+      to: [email_address],
+      cc,
+      message: { subject: "Important Message from WSPTC Staff", text: message, html: message },
+      timestamp: new Date(),
+      status: "pending",
+    });
   };
 
   return (
@@ -67,17 +84,29 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
         <ItemName>{name}</ItemName>
         <ItemIcon src={icon} alt={`${name} icon`} />
       </ItemInfo>
+
       <ActionButtons>
-        <ActionButton onClick={DismissClick} color="#E07B7B">
+        {/* use popup */}
+        <ActionButton onClick={openDismiss} color="#E07B7B">
           <ButtonIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/e59ad9e6f2ce0204f143d5e1d323a093335b061c0c2a8e996f1af784f18cbddf?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Dismiss icon" />
           DISMISS
         </ActionButton>
+
         <ActionButton onClick={ContactClick} color="#69B984">
           <ButtonIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/3ef5d023992f3dcd56c5ca590a6975bbc4bbace83c6f2e5238a132929db165e0?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Contact icon" />
           CONTACT
         </ActionButton>
+
         {isPopupOpen && <ContactPopup onClose={togglePopup} />}
+        {showDismiss && (
+          <DismissPopup
+            onClose={closeDismiss}
+            onMissing={markMissing}
+            onReturned={markReturned}
+          />
+        )}
       </ActionButtons>
+
       <ItemDetails>
         <DetailGroup>
           <DetailIcon src="https://cdn.builder.io/api/v1/image/assets/TEMP/2978a3e3fd74e3d25968f47abcb5308d762f64b6cea9ede331bceaa5cc678b37?placeholderIfAbsent=true&apiKey=74fbfc420745470bbcfc2ad34496c208" alt="Time icon" />
@@ -92,6 +121,7 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
   );
 };
 
+/* styles unchanged from yours */
 const CardContainer = styled.div`
   border-radius: 12px;
   background-color: rgba(255, 255, 255, 0.5);

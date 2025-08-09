@@ -10,6 +10,7 @@ import Landing from "./components/Landing";
 import CheckoutForm from "./components/CheckoutForm";
 import CheckinForm from "./components/CheckinForm";
 import AdminPage from "./components/AdminPage";
+import ToolCheckoutHome from "./components/ToolCheckoutHome";
 
 function App() {
 	return (
@@ -25,6 +26,8 @@ function App() {
 
 					<Route path="/checkout" element={<CheckoutForm />} />
 					<Route path="/checkin" element={<CheckinForm />} />
+
+					<Route path="/tool" element={<ToolCheckoutHome />} />
 				</Route>
 			</Routes>
 		</AuthProvider>

@@ -1,155 +1,114 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllTools, getTool } from "../firebase/tools";
 import { createTicket } from "../firebase/ticket";
 import styled from "styled-components";
 import UniqnameForm from "./UniqnameForm";
-import { Formlabel, Description, Fieldlabel, Select, StatusMessage, SubmitButton, SignOutButton } from "../styles/form-styles";
+import {
+  Formlabel, Description, Fieldlabel, Select,
+  StatusMessage, SubmitButton, SignOutButton
+} from "../styles/form-styles";
+import useIdleAutoSignout from "../hooks/useIdleAutoSignout";
 
 const CheckoutForm = () => {
-	const [tools, setTools] = useState([]);
-	const [selectedTool, setSelectedTool] = useState("");
-	const [selectedLocation, setSelectedLocation] = useState("");
+  const [tools, setTools] = useState([]);
+  const [selectedTool, setSelectedTool] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [uniqname, setUniqname] = useState("");
+  const [, setTrainings] = useState([]);
+  const [statusMessage, setStatusMessage] = useState("");
 
-	const [uniqname, setUniqname] = useState("");
-	const [trainings, setTrainings] = useState([]);
-	const [statusMessage, setStatusMessage] = useState("");
+  const navigate = useNavigate();
 
-	useEffect(() => {
-		handleToolUpdate();
-	}, []);
+  useEffect(() => {
+    (async () => {
+      const temp = await getAllTools();
+      setTools(temp.map((t) => t.name).sort());
+    })();
+  }, []);
 
-	const handleToolUpdate = async () => {
-		const tempTools = await getAllTools();
-		setTools(tempTools.map((tool) => tool.name).sort());
-	};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const info = await getTool(selectedTool);
+    await createTicket({
+      created_at: new Date(),
+      location: selectedLocation,
+      tool: selectedTool,
+      tool_rating: info?.rating || 1,
+      user: uniqname,
+      open: true,
+    });
+    setSelectedTool("");
+    setSelectedLocation("");
+    setStatusMessage(`Successfully signed out ${selectedTool} from the ${selectedLocation}`);
+  };
 
-	// Handle form submission
-	const handleSubmit = async (e) => {
-		e.preventDefault(); // Prevent page reload
+  // One place to reset & route to /tool
+  const handleSignOut = useCallback(() => {
+    setSelectedTool("");
+    setSelectedLocation("");
+    setStatusMessage("");
+    setUniqname("");
+    navigate("/tool");            // <-- send to Tool Checkout home
+  }, [navigate]);
 
-		const created_at = new Date();
-		const user = uniqname;
-		const tool = selectedTool;
-		const location = selectedLocation;
-		const open = true;
+  // Auto sign out after 5s of inactivity when signed in
+  useIdleAutoSignout({
+    enabled: Boolean(uniqname),
+    delay: 5000,
+    onSignOut: handleSignOut,     // <-- same handler routes to /tool
+  });
 
-		const toolInfo = await getTool(tool);
-		const tool_rating = toolInfo?.rating || 1;
+  return (
+    <Container>
+      {!uniqname ? (
+        <UniqnameForm setUniqname={setUniqname} setTrainings={setTrainings} />
+      ) : (
+        <Checkout onSubmit={handleSubmit}>
+          <Formlabel>Tool Borrowing Form</Formlabel>
+          <Description>Please choose the tool you are checking out and your location below</Description>
 
-		const ticket = {
-			created_at,
-			location,
-			tool,
-			tool_rating,
-			user,
-			open,
-		};
+          <Fieldlabel htmlFor="location">Location:</Fieldlabel>
+          <Select id="location" value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
+            <option value="">-- Please choose an location --</option>
+            <option value="wilson">Wilson Center</option>
+            <option value="frb">FRB Makerspace</option>
+          </Select>
 
-		createTicket(ticket);
-		setSelectedTool("");
-		setSelectedLocation("");
-		setStatusMessage(`Successfully signed out ${tool} from the ${location}`);
-		console.log(trainings);
-	};
+          <Fieldlabel htmlFor="tool">Tool:</Fieldlabel>
+          <Select id="tool" value={selectedTool} onChange={(e) => setSelectedTool(e.target.value)}>
+            <option value="">-- Please choose an option --</option>
+            {tools.map((item) => (<option key={item} value={item}>{item}</option>))}
+          </Select>
 
-	const handleSignOut = (e) => {
-		e.preventDefault();
+          {statusMessage && (
+            <>
+              <StatusMessage>{statusMessage}</StatusMessage>
+              <StatusMessage>Check-out another tool above or please sign out below</StatusMessage>
+            </>
+          )}
 
-		setSelectedTool("");
-		setSelectedLocation("");
-		setStatusMessage("");
-		setUniqname("");
-	}
-
-	return (
-		<Container>
-			{!uniqname ? (
-				<UniqnameForm setUniqname={setUniqname} setTrainings={setTrainings} />
-			) : (
-				<Checkout onSubmit={handleSubmit}>
-					<Formlabel>Tool Borrowing Form</Formlabel>
-					<Description>
-						Please choose the tool you are checking out and your location below
-					</Description>
-					<Fieldlabel htmlFor="dropdown">Location:</Fieldlabel>
-					<Select
-						id="dropdown"
-						value={selectedLocation}
-						onChange={(e) => {
-							setSelectedLocation(e.target.value);
-						}}
-					>
-						<option value="">-- Please choose an location --</option>
-						<option value="wilson">Wilson Center</option>
-						<option value="frb">FRB Makerspace</option>
-					</Select>
-					
-					<Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
-					<Select
-						id="dropdown"
-						value={selectedTool}
-						onChange={(e) => {
-							setSelectedTool(e.target.value);
-						}}
-					>
-						<option value="">-- Please choose an option --</option>
-						{tools.map((item, index) => (
-							<option key={index} value={item}>
-								{item}
-							</option>
-						))}
-					</Select>
-					
-					{statusMessage ? (
-						<>
-							<StatusMessage>{statusMessage}</StatusMessage>
-							<StatusMessage>Check-out another tool above or please sign out below</StatusMessage>
-							
-						</>
-					) : (
-						<></>
-					)}
-
-					<SubmitButton type="submit" disabled={!selectedTool || !selectedLocation}>
-						Submit
-					</SubmitButton>
-					<SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
-					
-				</Checkout>
-			)}
-		</Container>
-	);
+          <SubmitButton type="submit" disabled={!selectedTool || !selectedLocation}>Submit</SubmitButton>
+          <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
+        </Checkout>
+      )}
+    </Container>
+  );
 };
 
 const Container = styled.div`
-	width: 100%;
-	padding: 40px 20px;
-	display: flex;
-	justify-content: center;
-
-	@media (max-width: 991px) {
-		width: 100%;
-		padding: 40px 40px;
-		justify-content: center;
-	}
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 991px) { width: 100%; padding: 40px 40px; justify-content: center; }
 `;
-
 const Checkout = styled.form`
-	width: 100%;
-	max-width: 480px;
-	padding: 32px;
-	background-color: white;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-
-	@media (max-width: 991px) {
-		max-width: 70%;
-		padding: 12px;
-	}
+  width: 100%;
+  max-width: 480px;
+  padding: 32px; background-color: white; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  display: flex; flex-direction: column; gap: 4px;
+  @media (max-width: 991px) { max-width: 70%; padding: 12px; }
 `;
-
-
 export default CheckoutForm;
