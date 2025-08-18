@@ -48,6 +48,7 @@ export const DashboardHeader = styled.div`
   color: #000;
   justify-content: center;
   font: 700 22px Inter, sans-serif;
+  gap: 10px;
 
   @media (max-width: 991px) {
     max-width: 100%;

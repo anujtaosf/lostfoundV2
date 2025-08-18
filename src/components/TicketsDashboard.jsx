@@ -19,10 +19,14 @@ const TicketsDashboard = () => {
 		<DashboardContainer>
 			<DashboardHeader>
 				<DashboardTitle>Tickets Dashboard</DashboardTitle>
-				<Select id="location" value={currentLocation} onChange={(e) => setCurrentLocation(e.target.value)}>
-					<option value="frb">FRB Makerspace</option>
-					<option value="wilson">Wilson Center</option>
-				</Select>
+				<ToggleWrap role="tablist" aria-label="Location">
+					<Toggle $active={currentLocation === "frb"} onClick={() => setCurrentLocation("frb")} role="tab" aria-selected={currentLocation === "frb"}>
+						FRB Makerspace
+					</Toggle>
+					<Toggle $active={currentLocation === "wilson"} onClick={() => setCurrentLocation("wilson")} role="tab" aria-selected={currentLocation === "wilson"}>
+						Wilson Center
+					</Toggle>
+				</ToggleWrap>
 			</DashboardHeader>
 			<MainContent>
 				<Column>
@@ -41,15 +45,27 @@ const TicketsDashboard = () => {
 
 export default TicketsDashboard;
 
-export const Select = styled.select`
-	padding: 8px;
-	margin: 10px;
+const ToggleWrap = styled.div`
+	display: inline-flex;
+	background: #e9edf8;
+	border-radius: 999px;
+	padding: 4px;
+	gap: 4px;
+	margin-top: 10px;
 	margin-bottom: 25px;
-	display: center;
-	border-radius: 6px;
+`;
 
-	&:focus {
-		outline: none;
-		box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+const Toggle = styled.button`
+	appearance: none;
+	border: none;
+	cursor: pointer;
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-weight: 700;
+	background: ${(p) => (p.$active ? "#ffffff" : "transparent")};
+	color: ${(p) => (p.$active ? "#0d2a44" : "#4b5563")};
+	box-shadow: ${(p) => (p.$active ? "0 1px 2px rgba(0,0,0,.08)" : "none")};
+	&:hover {
+		background: ${(p) => (p.$active ? "#ffffff" : "rgba(255, 255, 255, 0.6)")};
 	}
 `;
