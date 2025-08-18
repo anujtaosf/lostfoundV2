@@ -1,17 +1,32 @@
+// CheckinForm.jsx (a.k.a. your "return" form)
 import React, { useEffect, useState, useCallback } from "react";
-import { closeTicket, getOpenTicketsFromUser } from "../firebase/ticket";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import {
+  closeTicket,
+  getOpenTicketsFromUserAtLocation,
+} from "../firebase/ticket";
 import { createNotification } from "../firebase/notifications";
 import UniqnameFormReturn from "./UniqnameFormReturn";
 import {
-  Formlabel, Description, Fieldlabel, Select,
-  StatusMessage, SubmitButton, SignOutButton, Input, CheckboxInput,
+  Formlabel,
+  Description,
+  Fieldlabel,
+  Select,
+  StatusMessage,
+  SubmitButton,
+  SignOutButton,
+  Input,
+  CheckboxInput,
 } from "../styles/form-styles";
-import { useNavigate } from "react-router-dom";
 import useIdleAutoSignout from "../hooks/useIdleAutoSignout";
 
-const CheckoutForm = () => {
+const CheckinForm = () => {
   const navigate = useNavigate();
+  const loc = useLocation();
+  const site = (
+    loc.state?.site || localStorage.getItem("toolSite") || "frb"
+  ).toLowerCase(); // "frb" | "wilson"
 
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState("");
@@ -23,17 +38,19 @@ const CheckoutForm = () => {
   useEffect(() => {
     if (!uniqname) return;
     (async () => {
-      const ts = await getOpenTicketsFromUser(uniqname);
+      const ts = await getOpenTicketsFromUserAtLocation(uniqname, site);
       setTickets(ts);
     })();
-  }, [uniqname]);
+  }, [uniqname, site]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const ticket = tickets.find((t) => t.id === selectedTicket);
+    if (!ticket) return;
 
     await closeTicket(selectedTicket);
+
     if (isBroken) {
       await createNotification({
         created_at: new Date(),
@@ -45,30 +62,33 @@ const CheckoutForm = () => {
       });
     }
 
-    const ts = await getOpenTicketsFromUser(uniqname);
+    // refresh only this user's tickets at this site
+    const ts = await getOpenTicketsFromUserAtLocation(uniqname, site);
     setTickets(ts);
     setSelectedTicket("");
     setIsBroken(false);
     setBrokenDescription("");
-    setStatusMessage(`Successfully checked in ${ticket.tool}`);
+    setStatusMessage(`Successfully checked in ${ticket.tool} (${site.toUpperCase()})`);
   };
 
-  // One place to clear and route to /tool
-  const handleSignOut = useCallback((e) => {
-    e?.preventDefault?.();
-    setSelectedTicket("");
-    setIsBroken(false);
-    setBrokenDescription("");
-    setTickets([]);
-    setUniqname("");
-    navigate("/tool");                // <-- go to Tool Checkout home
-  }, [navigate]);
+  // Clear and route to /tool
+  const handleSignOut = useCallback(
+    (e) => {
+      e?.preventDefault?.();
+      setSelectedTicket("");
+      setIsBroken(false);
+      setBrokenDescription("");
+      setTickets([]);
+      setUniqname("");
+      navigate("/tool");
+    },
+    [navigate]
+  );
 
-  // Auto sign-out after 5s inactivity (only when signed in)
   useIdleAutoSignout({
     enabled: Boolean(uniqname),
     delay: 5000,
-    onSignOut: handleSignOut,         // <-- same handler routes to /tool
+    onSignOut: handleSignOut,
   });
 
   return (
@@ -78,8 +98,11 @@ const CheckoutForm = () => {
       ) : (
         <Checkin onSubmit={handleSubmit}>
           <Formlabel>Tool Return Form</Formlabel>
+          <SiteRow>
+            Location: <SiteBadge>{site.toUpperCase()}</SiteBadge>
+          </SiteRow>
           <Description>
-            Thank you for returning the tool! Please choose the tool you are checking in below
+            Thank you for returning the tool! Please choose the tool you are checking in below.
           </Description>
 
           <Fieldlabel htmlFor="dropdown">Tool:</Fieldlabel>
@@ -90,7 +113,9 @@ const CheckoutForm = () => {
           >
             <option value="">-- Please choose an option --</option>
             {tickets.map((t) => (
-              <option key={t.id} value={t.id}>{t.tool}</option>
+              <option key={t.id} value={t.id}>
+                {t.tool}
+              </option>
             ))}
           </Select>
 
@@ -118,17 +143,23 @@ const CheckoutForm = () => {
           {statusMessage && (
             <>
               <StatusMessage>{statusMessage}</StatusMessage>
-              <StatusMessage>Check-in another tool above or please sign out below</StatusMessage>
+              <StatusMessage>
+                Check in another tool above or please sign out below
+              </StatusMessage>
             </>
           )}
 
-          <SubmitButton type="submit" disabled={!selectedTicket}>Submit</SubmitButton>
+          <SubmitButton type="submit" disabled={!selectedTicket}>
+            Submit
+          </SubmitButton>
           <SignOutButton onClick={handleSignOut}>Sign Out</SignOutButton>
         </Checkin>
       )}
     </Container>
   );
 };
+
+export default CheckinForm;
 
 const Container = styled.div`
   width: 100%;
@@ -144,11 +175,14 @@ const Checkin = styled.form`
   padding: 32px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   gap: 4px;
   @media (max-width: 991px) { max-width: 70%; padding: 12px; }
 `;
 
-export default CheckoutForm;
+const SiteRow = styled.div` margin: 6px 0 8px; color: #58677a; `;
+const SiteBadge = styled.span`
+  background:#eef2f7; color:#0d2a44; border-radius:999px; padding:2px 10px; font-weight:700;
+`;

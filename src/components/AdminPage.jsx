@@ -4,6 +4,8 @@ import AddToolForm from "./AddToolForm";
 import AdminUsers from "./AdminUsers";
 import AddUserForm from "./AddUserForm";
 import { DashboardContainer, MainContent, Column, DashboardHeader, DashboardTitle } from "../styles/dashboard-styles";
+
+// ... inside your JSX near the Tools column:
 const AdminPage = () => {
 	const [formState, setFormState] = useState("");
 
@@ -16,7 +18,6 @@ const AdminPage = () => {
 		
 		setFormState(newState);
 	}
-
 	return (
 		<>
 			<DashboardContainer>

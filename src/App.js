@@ -11,6 +11,7 @@ import CheckoutForm from "./components/CheckoutForm";
 import CheckinForm from "./components/CheckinForm";
 import AdminPage from "./components/AdminPage";
 import ToolCheckoutHome from "./components/ToolCheckoutHome";
+import TicketsPage from "./components/TicketsPage";
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 					<Route path="/checkin" element={<CheckinForm />} />
 
 					<Route path="/tool" element={<ToolCheckoutHome />} />
+					<Route path="/tickets" element={<TicketsPage />} />
 				</Route>
 			</Routes>
 		</AuthProvider>

@@ -26,10 +26,11 @@ const Header = () => {
             <NavItem to="/admin" isActive={path === "/admin"}>
               Inventory
             </NavItem>
+			<NavItem to="/tickets" isActive={path === "/tickets"}>
+              Tickets
+            </NavItem>
           </>
         )}
-
-        {/* Single entry for the whole borrow/return flow */}
         <NavItem to="/tool" isActive={isToolFlow}>
           Tool Checkout
         </NavItem>

@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { createTool } from "../firebase/tools";
 import {Formlabel, Description, Fieldlabel, Input, Select, SubmitButton} from "../styles/form-styles"
-const trainings = ["none", "frb-basic2", "wilson-basic2"];
+const trainings = ["none", "frb-basic2", "wilson-basic2", "welding"];
+const LOCATIONS = ["frb", "wilson"];
 
 const AddToolForm = () => {
 	const [nameInput, setNameInput] = useState("");
 	const [amountInput, setAmountInput] = useState(0);
 	const [selectedTraining, setSelectedTraining] = useState("");
+	const [location, setLocation] = useState("frb");
+
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
@@ -17,11 +20,13 @@ const AddToolForm = () => {
 			name: nameInput,
 			amount: amountInput,
 			training: selectedTraining,
+			location,
 		};
 
 		setNameInput("");
 		setAmountInput("");
 		setSelectedTraining("");
+		setLocation("frb");
 		await createTool(tool);
 	};
 
@@ -49,6 +54,19 @@ const AddToolForm = () => {
 						setAmountInput(e.target.value);
 					}}
 				/>
+
+				<Fieldlabel htmlFor="location">Location:</Fieldlabel>
+				<Select
+				id="location"
+				value={location}
+				onChange={(e) => setLocation(e.target.value)}
+				>
+				{LOCATIONS.map((loc) => (
+					<option key={loc} value={loc}>
+					{loc.toUpperCase()}
+					</option>
+				))}
+				</Select>
 	
 				<Fieldlabel htmlFor="dropdown">Training:</Fieldlabel>
 				<Select
@@ -68,8 +86,8 @@ const AddToolForm = () => {
 
 				<SubmitButton
 					type="submit"
-					disabled={!nameInput | !amountInput | !selectedTraining}
-				>
+					disabled={!nameInput || !amountInput || !selectedTraining || !location}
+					>
 					Submit
 				</SubmitButton>
 			</Form>

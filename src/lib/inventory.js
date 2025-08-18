@@ -2,28 +2,40 @@
 import { getOpenTickets } from "../firebase/ticket";
 import { getAllTools } from "../firebase/tools";
 
+export const makeInvKey = (name, location) =>
+  `${String(name).toLowerCase()}__${String(location || "").toLowerCase()}`;
+
 export const getInventory = async () => {
-  const tickets = await getOpenTickets();
-  const tools = await getAllTools();
+  const [tickets, tools] = await Promise.all([
+    getOpenTickets(),
+    getAllTools(),
+  ]);
 
-  const byName = new Map(tools.map(t => [t.name, t]));
-  const inventory = {};
+  const leftByKey = {};
+  tools.forEach(t=>{
+    const key = makeInvKey(t.name, t.location || "frb");
+    leftByKey[key]=Number(t.amount ?? 0);
+  })
 
-  // base “left”: manualLeft if present, else amount
-  tools.forEach(t => {
-    inventory[t.name] = typeof t.manualLeft === "number"
-      ? Number(t.manualLeft)
-      : Number(t.amount);
-  });
-
-  // subtract open tickets only when there is no override
-  tickets.forEach(tx => {
-    const tool = byName.get(tx.tool);
-    if (!tool) return;
-    if (typeof tool.manualLeft !== "number") {
-      inventory[tx.tool] = (inventory[tx.tool] ?? 0) - 1;
+  tickets.forEach((tx) => {
+    const key = makeInvKey(tx.tool, tx.location || "frb");
+    if (key in leftByKey) {
+      leftByKey[key] = Math.max(0, leftByKey[key] - 1);
     }
   });
 
-  return inventory;
+  return leftByKey;
+};
+
+export const getInventoryForSite = async (site) => {
+  const all = await getInventory();
+  const out = {};
+  const needle = `__${String(site).toLowerCase()}`;
+  Object.entries(all).forEach(([k, v]) => {
+    if (k.endsWith(needle)) {
+      const name = k.slice(0, -needle.length);
+      out[name] = v;
+    }
+  });
+  return out;
 };

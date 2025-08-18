@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, Timestamp, doc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, Timestamp, doc, updateDoc, orderBy} from "firebase/firestore";
 
 /**
  * @typedef {Object} Ticket
@@ -63,3 +63,34 @@ export const closeTicket = async (ticket_id) => {
     const ticketRef = doc(db, "tickets", ticket_id);
     await updateDoc(ticketRef, {open: false})
 }
+
+export const getAllTickets = async () => {
+  const q = query(collection(db, "tickets"), orderBy("created_at", "desc"));
+  const snap = await getDocs(q);
+
+  const tickets = [];
+  snap.forEach((d) => {
+    const data = d.data();
+    // Ensure created_at is a JS Date for easy formatting/sorting if needed
+    const createdAt =
+      data.created_at && typeof data.created_at.toDate === "function"
+        ? data.created_at.toDate()
+        : data.created_at;
+    tickets.push({ id: d.id, ...data, created_at: createdAt });
+  });
+
+  return tickets;
+};
+
+export const getOpenTicketsFromUserAtLocation = async (user, location) => {
+  const q = query(
+    collection(db, "tickets"),
+    where("open", "==", true),
+    where("user", "==", user),
+    where("location", "==", location)
+  );
+  const snap = await getDocs(q);
+  const out = [];
+  snap.forEach((d) => out.push({ id: d.id, ...d.data() }));
+  return out;
+};

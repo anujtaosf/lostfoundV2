@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { getAllTools, updateTool, deleteTool } from "../firebase/tools";
 import AdminToolCard from "./AdminToolCard";
-import { getInventory } from "../lib/inventory";
+import { getInventory, makeInvKey } from "../lib/inventory";
 import {
   ColumnContainer,
   SectionHeader,
@@ -15,6 +15,8 @@ const AdminTools = ({ handleFormStateChange }) => {
   const [tools, setTools] = useState([]);
   const [inventory, setInventory] = useState({});
   const [query, setQuery] = useState("");
+  const [site, setSite] = useState("frb");
+  
 
   useEffect(() => {
     const load = async () => {
@@ -30,25 +32,27 @@ const AdminTools = ({ handleFormStateChange }) => {
 
 const merged = useMemo(() => {
   return tools.map(t => {
-    const left = Number(inventory?.[t.name] ?? 0);
+    const key = makeInvKey(t.name, t.location || "frb");
+    const left = Number(inventory?.[key] ?? t.amount ?? 0);
     const amount = Number(t.amount ?? 0);
     return { ...t, left, missing: left < amount };
   });
 }, [tools, inventory]);
 
-// search + sort (missing first, then alpha)
 const visibleTools = useMemo(() => {
   const q = query.trim().toLowerCase();
-  let list = merged;
+
+  let list = merged.filter(t => (t.location || "frb").toLowerCase() === site);
+
   if (q) list = list.filter(t => t.name.toLowerCase().includes(q));
 
   return list.sort((a, b) => {
-    if (a.missing !== b.missing) return a.missing ? -1 : 1; // missing first
+    if (a.missing !== b.missing) return a.missing ? -1 : 1;
     return a.name.localeCompare(b.name);
   });
-}, [merged, query]);
+}, [merged, query, site]);
 
-  // --- handlers passed to cards ---
+
  
 const handleSave = async (id, updates, originalName) => {
 await updateTool(id, updates);
@@ -92,7 +96,17 @@ setTools(prev =>
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+            <ToggleWrap role="tablist" aria-label="Tool location">
+              <Toggle $active={site === "frb"} onClick={() => setSite("frb")} role="tab" aria-selected={site === "frb"}>
+                FRB
+              </Toggle>
+              <Toggle $active={site === "wilson"} onClick={() => setSite("wilson")} role="tab" aria-selected={site === "wilson"}>
+                Wilson
+              </Toggle>
+            </ToggleWrap>
           </StickySearch>
+
+          
 
           <ListSpacer /> {/* spacing under sticky bar */}
           {visibleTools.map((tool) => (
@@ -149,9 +163,10 @@ const StickySearch = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 4px;
 
-  padding: 0;                 /* tight like Tools */
-  background: transparent;    /* no banner box */
+  padding: 0;                
+  background: transparent;  
 `;
 
 const SearchInput = styled.input`
@@ -180,9 +195,31 @@ const SearchInput = styled.input`
 `;
 
 
+const ToggleWrap = styled.div`
+  display: inline-flex;
+  background: #e9edf8;          /* softer than tools' wrap, same family */
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+  margin-left: auto;
+  margin-right: 10px;
+`;
 
+const Toggle = styled.button`
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: ${(p) => (p.$active ? "#ffffff" : "transparent")};
+  color: ${(p) => (p.$active ? "#0d2a44" : "#4b5563")};
+  box-shadow: ${(p) => (p.$active ? "0 1px 2px rgba(0,0,0,.08)" : "none")};
+  &:hover {
+    background: ${(p) => (p.$active ? "#ffffff" : "rgba(255, 255, 255, 0.6)")};
+  }
+`;
 
-/** small spacer so first card isn’t tucked under sticky bar shadows */
 const ListSpacer = styled.div`
   height: 6px;
 `;
