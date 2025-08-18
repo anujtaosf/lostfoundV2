@@ -77,6 +77,7 @@ const Card = styled.div`
   border-radius: 16px;
   padding: 36px 32px 32px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 `;
 
 const Header = styled.div`
@@ -86,15 +87,19 @@ const Header = styled.div`
 
 const H1 = styled.h1`
   margin: 0 0 8px;
-  font-size: 34px;
+  font-size: 28px;
   line-height: 1.2;
-  color: #0d2a44;
+  color: #00274c;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 800;
 `;
 
 const Sub = styled.p`
   margin: 0;
-  color: #5e6b7a;
-  font-size: 16px;
+  color: #29445e;
+  font-size: 15px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
 `;
 
 const Controls = styled.div`
@@ -121,13 +126,14 @@ const Toggle = styled.button`
   cursor: pointer;
   padding: 10px 18px;
   border-radius: 999px;
-  font-weight: 800;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
   letter-spacing: 0.2px;
   background: ${(p) => (p.$active ? "#ffffff" : "transparent")};
-  color: ${(p) => (p.$active ? "#0d2a44" : "#475569")};
+  color: ${(p) => (p.$active ? "#00274c" : "#475569")};
   box-shadow: ${(p) => (p.$active ? "0 2px 6px rgba(0,0,0,0.08)" : "none")};
   transition: background 120ms ease, transform 120ms ease;
-
   &:hover {
     background: ${(p) => (p.$active ? "#ffffff" : "rgba(255,255,255,0.65)")};
     transform: translateY(-1px);
@@ -135,16 +141,19 @@ const Toggle = styled.button`
 `;
 
 const SiteNote = styled.div`
-  color: #5e6b7a;
+  color: #29445e;
   font-size: 14px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
 `;
 
 const Badge = styled.span`
   background: #eff3f9;
-  color: #0d2a44;
+  color: #00274c;
   border-radius: 999px;
   padding: 4px 12px;
-  font-weight: 800;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
   display: inline-block;
 `;
 
@@ -162,12 +171,13 @@ const Buttons = styled.div`
 const BaseBtn = styled.button`
   border: none;
   cursor: pointer;
-  font-weight: 800;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
   padding: 14px 18px;
   border-radius: 12px;
   min-height: 48px;
   transition: transform 120ms ease, box-shadow 120ms ease;
-
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
