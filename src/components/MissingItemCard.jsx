@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { formatTimestampToDuration } from "../lib/time";
 import ContactPopup from "./ContactPopup";
-import DismissPopup from "./DismissPopup";              // ⬅️ add
+import DismissPopup from "./DismissPopup";
 import { closeTicket } from "../firebase/ticket";
-import { createEmail } from "../firebase/mail";
 import { getInventory } from "../lib/inventory";
 import { getTool, setManualLeft, clearManualLeft } from "../firebase/tools";
 
@@ -21,10 +20,8 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
   const user = ticket.user;
   const location = ticket.location;
 
-  // contact popup
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const togglePopup = () => setIsPopupOpen((s) => !s);
-
+  const [draft, setDraft] = useState(null); // { to, cc, subject, body }
+  const closeDraft = () => setDraft(null);
   // dismiss popup
   const [showDismiss, setShowDismiss] = useState(false);
   const openDismiss = (e) => { e.preventDefault(); setShowDismiss(true); };
@@ -56,27 +53,39 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
     setShowDismiss(false);
     await refreshTickets();
   };
+const ContactClick = async (e) => {
+  e.preventDefault();
+  const email_address = `${user}@umich.edu`;
+  const cc = [
+    "anuhea@umich.edu",
+    "ljweaver@umich.edu",
+    "aemigh@umich.edu",
+    "blakedes@umich.edu",
+    "kcdixon@umich.edu",
+  ];
+  const subject = "Important Message from WSPTC Staff";
 
-  const ContactClick = async (e) => {
-    e.preventDefault();
-    const email_address = `${user}@umich.edu`;
-    const cc = [
-      "anuhea@umich.edu",
-      "ljweaver@umich.edu",
-      "aemigh@umich.edu",
-      "blakedes@umich.edu",
-      "kcdixon@umich.edu",
-    ];
-    const message = `Hello, this is a reminder to please return ${name} to the ${location}`;
-    togglePopup();
-    await createEmail({
-      to: [email_address],
-      cc,
-      message: { subject: "Important Message from WSPTC Staff", text: message, html: message },
-      timestamp: new Date(),
-      status: "pending",
-    });
-  };
+  // map location -> friendly phrase
+  let locationText = location;
+  if (location.toLowerCase() === "frb") {
+    locationText = "FRB makerspace";
+  } else if (location.toLowerCase() === "wilson") {
+    locationText = "Wilson Center";
+  }
+
+  const body = `Hello ${user},
+
+This is a friendly reminder to please return ${name.toUpperCase()} to the ${locationText}.
+
+If you believe you received this in error, please reply to let us know. Thank you!`;
+
+  setDraft({
+    to: email_address,
+    cc,
+    subject,
+    body,
+  });
+};
 
   return (
     <CardContainer>
@@ -97,7 +106,15 @@ const MissingItemCard = ({ ticket, refreshTickets }) => {
           CONTACT
         </ActionButton>
 
-        {isPopupOpen && <ContactPopup onClose={togglePopup} />}
+       {draft && (
+         <ContactPopup
+           to={draft.to}
+           cc={draft.cc}
+           subject={draft.subject}
+           body={draft.body}
+           onClose={closeDraft}
+         />
+       )}
         {showDismiss && (
           <DismissPopup
             onClose={closeDismiss}
