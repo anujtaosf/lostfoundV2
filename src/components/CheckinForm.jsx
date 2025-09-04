@@ -87,7 +87,6 @@ const CheckinForm = () => {
 
   useIdleAutoSignout({
     enabled: Boolean(uniqname),
-    delay: 5000,
     onSignOut: handleSignOut,
   });
 

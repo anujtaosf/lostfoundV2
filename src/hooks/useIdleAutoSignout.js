@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
 /** Auto sign out after `delay` ms of no user activity */
-export default function useIdleAutoSignout({ enabled, delay = 5000, onSignOut }) {
+export default function useIdleAutoSignout({ enabled, delay = 50000, onSignOut }) {
   const timerRef = useRef(null);
 
   const stop = useCallback(() => {

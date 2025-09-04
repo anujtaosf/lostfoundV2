@@ -48,7 +48,7 @@ const CheckoutForm = () => {
     navigate("/tool"); // back to home
   }, [navigate]);
 
-  useIdleAutoSignout({ enabled: Boolean(uniqname), delay: 5000, onSignOut: handleSignOut });
+  useIdleAutoSignout({ enabled: Boolean(uniqname), onSignOut: handleSignOut });
 
   return (
     <Container>
