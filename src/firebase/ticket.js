@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, Timestamp, doc, updateDoc, orderBy} from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, Timestamp, doc, updateDoc, orderBy, limit as firestoreLimit} from "firebase/firestore";
 
 /**
  * @typedef {Object} Ticket
@@ -64,8 +64,13 @@ export const closeTicket = async (ticket_id) => {
     await updateDoc(ticketRef, {open: false})
 }
 
-export const getAllTickets = async () => {
-  const q = query(collection(db, "tickets"), orderBy("created_at", "desc"));
+export const getAllTickets = async (limit = null) => {
+  const constraints = [orderBy("created_at", "desc")];
+  if (limit && typeof limit === "number") {
+    constraints.push(firestoreLimit(limit));
+  }
+
+  const q = query(collection(db, "tickets"), ...constraints);
   const snap = await getDocs(q);
 
   const tickets = [];

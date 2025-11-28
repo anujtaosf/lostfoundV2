@@ -47,7 +47,10 @@ const AdminToolCard = ({ tool, inventory, onSave, onDelete }) => {
       <Left>
         {!isEditing ? (
           <>
-            <ItemName>{tool.name}</ItemName>
+            <NameRow>
+              <ItemName>{tool.name}</ItemName>
+              {tool.isCustom && <CustomBadge>Custom Tool</CustomBadge>}
+            </NameRow>
             <Totals>
               <DetailText>{tool.amount} total</DetailText>
               <DetailDot />
@@ -124,7 +127,9 @@ const CardContainer = styled.div`
 `;
 
 const Left = styled.div` display:flex; flex-direction:column; color:#00274c; gap:6px; `;
+const NameRow = styled.div` display:flex; align-items:center; gap:8px; `;
 const ItemName = styled.div` font-size:18px; font-weight:700; color:#00274c; `;
+const CustomBadge = styled.span` background:#fbbf24; color:#78350f; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; text-transform:uppercase; `;
 const Totals = styled.div` display:flex; align-items:center; gap:8px; `;
 const DetailText = styled.div` color: ${({ $danger }) => ($danger ? "#b42318" : "#00274c")};
   font-size: 14px;

@@ -7,6 +7,7 @@ import {
   getOpenTicketsFromUserAtLocation,
 } from "../firebase/ticket";
 import { createNotification } from "../firebase/notifications";
+import { getTool, deleteToolByName } from "../firebase/tools";
 import UniqnameFormReturn from "./UniqnameFormReturn";
 import {
   Formlabel,
@@ -60,6 +61,12 @@ const CheckinForm = () => {
         ticket: selectedTicket,
         open: true,
       });
+    }
+
+    // Check if the tool is custom and delete it from Firebase
+    const toolInfo = await getTool(ticket.tool);
+    if (toolInfo && toolInfo.isCustom) {
+      await deleteToolByName(ticket.tool);
     }
 
     // refresh only this user's tickets at this site

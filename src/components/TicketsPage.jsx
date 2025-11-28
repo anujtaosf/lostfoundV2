@@ -7,6 +7,7 @@ const TicketsPage = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [site, setSite] = useState("all"); // "all" | "frb" | "wilson"
+  const [limit, setLimit] = useState(50); // 50, 100, or null (all)
 
   const [closingId, setClosingId] = useState(null);
 
@@ -23,11 +24,12 @@ const TicketsPage = () => {
 
   useEffect(() => {
     (async () => {
-      const all = await getAllTickets(); // already DESC by created_at
+      setLoading(true);
+      const all = await getAllTickets(limit); // already DESC by created_at
       setTickets(all);
       setLoading(false);
     })();
-  }, []);
+  }, [limit]);
 
   const filtered = useMemo(() => {
     if (site === "all") return tickets;
@@ -44,24 +46,37 @@ const TicketsPage = () => {
       <Card>
         <HeaderRow>
           <Title>Tickets</Title>
-          <ToggleGroup role="tablist" aria-label="location filter">
-            <Toggle
-              role="tab"
-              aria-selected={site === "frb"}
-              $active={site === "frb"}
-              onClick={() => setSite("frb")}
-            >
-              FRB
-            </Toggle>
-            <Toggle
-              role="tab"
-              aria-selected={site === "wilson"}
-              $active={site === "wilson"}
-              onClick={() => setSite("wilson")}
-            >
-              Wilson
-            </Toggle>
-          </ToggleGroup>
+          <ControlsGroup>
+            <LimitSelector>
+              <LimitLabel>Show:</LimitLabel>
+              <LimitDropdown
+                value={limit || "all"}
+                onChange={(e) => setLimit(e.target.value === "all" ? null : Number(e.target.value))}
+              >
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="all">All</option>
+              </LimitDropdown>
+            </LimitSelector>
+            <ToggleGroup role="tablist" aria-label="location filter">
+              <Toggle
+                role="tab"
+                aria-selected={site === "frb"}
+                $active={site === "frb"}
+                onClick={() => setSite("frb")}
+              >
+                FRB
+              </Toggle>
+              <Toggle
+                role="tab"
+                aria-selected={site === "wilson"}
+                $active={site === "wilson"}
+                onClick={() => setSite("wilson")}
+              >
+                Wilson
+              </Toggle>
+            </ToggleGroup>
+          </ControlsGroup>
         </HeaderRow>
 
         <Table role="table" aria-label="tickets">
@@ -149,6 +164,45 @@ const Title = styled.h1`
   color: #0d2a44;
 `;
 
+const ControlsGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const LimitSelector = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const LimitLabel = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+`;
+
+const LimitDropdown = styled.select`
+  appearance: none;
+  background: #f1f5f9;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 6px 32px 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d2a44;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230d2a44' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  &:hover {
+    background-color: #e2e8f0;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 42, 68, 0.1);
+  }
+`;
 
 const ToggleGroup = styled.div`
   background: #f1f5f9;
